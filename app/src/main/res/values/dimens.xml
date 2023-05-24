@@ -7,4 +7,6 @@
     <dimen name="settings_margin_top_bottom">21dp</dimen>
     <dimen name="settings_margin_left">16dp</dimen>
     <dimen name="settings_text_size">16sp</dimen>
+    <dimen name="space_20">20dp</dimen>
+    <dimen name="space_40">40dp</dimen>
 </resources>
