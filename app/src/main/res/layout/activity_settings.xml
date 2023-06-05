@@ -13,86 +13,54 @@
 
         <ImageButton
             android:id="@+id/back_button"
+            style="@style/BackButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_20"
             android:paddingTop="@dimen/space_20"
-            android:paddingLeft="@dimen/space_20"
-            app:srcCompat="@drawable/ic_arrow_back"
-            style="@style/BackButtonStyle" />
+            app:srcCompat="@drawable/ic_arrow_back" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="28dp"
-            android:paddingTop="14dp"
+            android:layout_marginStart="@dimen/margin_vertical"
+            android:paddingTop="@dimen/padding_top"
             android:text="@string/settings"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textSize="22sp" />
 
     </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:text="@string/night_theme"
-            style="@style/SettingsTextViewStyle" />
-
-        <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerInParent="true" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
+    <Switch
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginHorizontal="@dimen/settings_margin_horizontal"
+        android:layout_marginBottom="@dimen/settings_margin_top_bottom"
+        android:paddingRight="-12dp"
+        android:text="@string/night_theme" />
 
-        <TextView
-            style="@style/SettingsTextViewStyle"
-            android:text="@string/share_app" />
-
-        <ImageButton
-            android:id="@+id/share_app"
-            style="@style/SettingsImageButtonStyle"
-            app:srcCompat="@drawable/ic_share_app" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
+    <TextView
+        android:id="@+id/share_app"
+        style="@style/SettingsTextViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginHorizontal="@dimen/settings_margin_horizontal"
+        android:text="@string/share_app"
+        app:drawableEndCompat="@drawable/ic_share_app" />
 
-        <TextView
-            android:text="@string/support"
-            style="@style/SettingsTextViewStyle" />
-
-        <ImageButton
-            android:id="@+id/support"
-            style="@style/SettingsImageButtonStyle"
-            app:srcCompat="@drawable/ic_support" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
+    <TextView
+        android:id="@+id/support"
+        style="@style/SettingsTextViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginHorizontal="@dimen/settings_margin_horizontal"
+        android:text="@string/support"
+        app:drawableEndCompat="@drawable/ic_support" />
 
-        <TextView
-            android:text="@string/terms_of_use"
-            style="@style/SettingsTextViewStyle" />
-
-        <ImageButton
-            android:id="@+id/terms_of_use"
-            style="@style/SettingsImageButtonStyle"
-            app:srcCompat="@drawable/ic_arrow_forward" />
-
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/terms_of_use"
+        style="@style/SettingsTextViewStyle"
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="@dimen/settings_margin_horizontal"
+        android:text="@string/terms_of_use"
+        app:drawableEndCompat="@drawable/ic_arrow_forward" />
 
 </LinearLayout>

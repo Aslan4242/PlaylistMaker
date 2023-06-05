@@ -9,35 +9,33 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingBottom="@dimen/space_40">
+        android:layout_marginBottom="@dimen/space_24"
+        android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/back_button"
+            style="@style/BackButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/space_20"
-            android:paddingTop="@dimen/space_20"
-            app:srcCompat="@drawable/ic_arrow_back"
-            style="@style/BackButtonStyle" />
+            android:layout_marginStart="@dimen/space_20"
+            android:layout_marginTop="@dimen/space_20"
+            app:srcCompat="@drawable/ic_arrow_back" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="28dp"
-            android:paddingTop="14dp"
+            android:layout_marginStart="@dimen/margin_vertical"
+            android:paddingTop="@dimen/padding_top"
             android:text="@string/search_button"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textSize="22sp" />
-
     </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/space_20"
         android:orientation="horizontal"
-        >
+        android:paddingHorizontal="@dimen/search_padding_horizontal">
 
         <EditText
             android:id="@+id/search_field"
@@ -45,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="36dp"
             android:drawableStart="@drawable/ic_search_button"
-            android:drawablePadding="11dp"
+            android:drawablePadding="9dp"
             android:hint="@string/search_button"
             android:inputType="text"
             android:lines="1"

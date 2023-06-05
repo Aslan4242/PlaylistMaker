@@ -4,7 +4,9 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageButton
+import android.widget.TextView
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,18 +18,19 @@ class SettingsActivity : AppCompatActivity() {
         backButton.setOnClickListener {
             val settingsIntent = Intent(this, MainActivity::class.java)
             startActivity(settingsIntent)
+            finish()
         }
 
-        val shareAppButton = findViewById<ImageButton>(R.id.share_app)
+        val shareAppButton = findViewById<TextView>(R.id.share_app)
 
         shareAppButton.setOnClickListener {
             val shareAppIntent = Intent(Intent.ACTION_SEND)
             shareAppIntent.type = "text/plain"
-            shareAppIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_app))
+            shareAppIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.course_link))
             startActivity(shareAppIntent)
         }
 
-        val supportButton = findViewById<ImageButton>(R.id.support)
+        val supportButton = findViewById<TextView>(R.id.support)
 
         supportButton.setOnClickListener {
             val supportIntent = Intent(Intent.ACTION_SENDTO)
@@ -40,7 +43,7 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(supportIntent)
         }
 
-        val termsOfUseButton = findViewById<ImageButton>(R.id.terms_of_use)
+        val termsOfUseButton = findViewById<TextView>(R.id.terms_of_use)
 
         termsOfUseButton.setOnClickListener {
             val url = Uri.parse(getString(R.string.offer_link))
