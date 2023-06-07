@@ -10,6 +10,7 @@
     <dimen name="search_padding_horizontal">16dp</dimen>
     <dimen name="padding_top">14dp</dimen>
     <dimen name="margin_vertical">28dp</dimen>
+    <dimen name="clear_button_size">12dp</dimen>
     <dimen name="space_20">20dp</dimen>
     <dimen name="space_24">24dp</dimen>
     <dimen name="space_40">40dp</dimen>

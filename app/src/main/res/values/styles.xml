@@ -38,4 +38,8 @@
         <item name="android:background">@drawable/edit_text_background</item>
         <item name="android:drawableTint">@color/grey</item>
     </style>
+
+    <style name="ClearButtonStyle">
+        <item name="android:tint">@color/grey</item>
+    </style>
 </resources>

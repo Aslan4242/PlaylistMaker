@@ -52,13 +52,15 @@
 
         <ImageView
             android:id="@+id/clearIcon"
+            style="@style/ClearButtonStyle"
             android:layout_gravity="center|end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/clear_button_size"
+            android:layout_height="@dimen/clear_button_size"
             android:layout_marginEnd="@dimen/main_icon_padding"
             android:background="@color/transparent"
             android:src="@drawable/clear_text_button"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible"/>
     </FrameLayout>
 
 </LinearLayout>

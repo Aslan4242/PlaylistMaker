@@ -28,8 +28,6 @@ class SearchActivity : AppCompatActivity() {
         val backButton = findViewById<ImageButton>(R.id.back_button)
 
         backButton.setOnClickListener {
-            val searchIntent = Intent(this, MainActivity::class.java)
-            startActivity(searchIntent)
             finish()
         }
 
