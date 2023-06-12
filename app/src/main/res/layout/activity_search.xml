@@ -1,9 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SearchActivity">
+    android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/space_24"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/back_button"
+            style="@style/BackButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_20"
+            android:layout_marginTop="@dimen/space_20"
+            app:srcCompat="@drawable/ic_arrow_back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_vertical"
+            android:paddingTop="@dimen/padding_top"
+            android:text="@string/search_button"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textSize="22sp" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/search_padding_horizontal">
+
+        <EditText
+            android:id="@+id/search_field"
+            style="@style/SearchEditTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:drawableStart="@drawable/ic_search_button"
+            android:drawablePadding="9dp"
+            android:hint="@string/search_button"
+            android:inputType="text"
+            android:lines="1"
+            android:paddingStart="13dp"
+            tools:ignore="RtlSymmetry" />
+
+        <ImageView
+            android:id="@+id/clearIcon"
+            style="@style/ClearButtonStyle"
+            android:layout_gravity="center|end"
+            android:layout_width="@dimen/clear_button_size"
+            android:layout_height="@dimen/clear_button_size"
+            android:layout_marginEnd="@dimen/main_icon_padding"
+            android:background="@color/transparent"
+            android:src="@drawable/clear_text_button"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+    </FrameLayout>
+
+</LinearLayout>
