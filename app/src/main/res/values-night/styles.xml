@@ -43,7 +43,21 @@
         <item name="android:textColor">@color/black_2</item>
     </style>
 
-    <style name="ClearButtonStyle">
-        <item name="android:tint">@color/black_2</item>
+    <style name="TrackNameStyle">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/track_name_text_size</item>
+    </style>
+
+    <style name="TrackDataStyle">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/track_data_text_size</item>
+    </style>
+
+    <style name="TrackArrowStyle">
+        <item name="drawableEndCompat">@drawable/ic_arrow_forward_white</item>
+    </style>
+
+    <style name="TrackCircleSeparatorStyle">
+        <item name="srcCompat">@drawable/circle</item>
     </style>
 </resources>

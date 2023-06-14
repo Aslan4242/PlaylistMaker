@@ -35,7 +35,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingHorizontal="@dimen/search_padding_horizontal">
+        android:paddingHorizontal="@dimen/search_padding_horizontal"
+        android:layout_marginBottom="@dimen/space_24">
 
         <EditText
             android:id="@+id/search_field"
@@ -62,5 +63,11 @@
             android:visibility="gone"
             tools:visibility="visible"/>
     </FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/searchRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
 </LinearLayout>
