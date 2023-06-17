@@ -36,6 +36,6 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     companion object {
-        const val IMAGE_CORNER_RADIUS = 2f
+        private const val IMAGE_CORNER_RADIUS = 2f
     }
 }
