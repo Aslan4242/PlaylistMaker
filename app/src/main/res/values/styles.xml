@@ -60,4 +60,38 @@
     <style name="TrackCircleSeparatorStyle">
         <item name="srcCompat">@drawable/circle_grey</item>
     </style>
+
+    <style name="PlaceHolderStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/space_102</item>
+        <item name="android:layout_marginHorizontal">@dimen/space_24</item>
+        <item name="android:textColor">@color/black_2</item>
+        <item name="android:textSize">@dimen/placeholder_text_size</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:visibility">gone</item>
+        <item name="drawableTopCompat">@drawable/ic_nothing_found</item>
+        <item name="android:drawablePadding">@dimen/search_padding_horizontal</item>
+    </style>
+
+    <style name="SomethingWentWrongStyle" parent="PlaceHolderStyle">
+        <item name="drawableTopCompat">@drawable/ic_something_went_wrong</item>
+    </style>
+
+    <style name="RefreshButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/space_24</item>
+        <item name="android:backgroundTint">@color/black_2</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:text">@string/refresh_button</item>
+        <item name="android:textSize">@dimen/refresh_button_text_size</item>
+        <item name="cornerRadius">@dimen/refresh_button_corner_radius</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:visibility">gone</item>
+    </style>
 </resources>

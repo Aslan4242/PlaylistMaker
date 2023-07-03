@@ -49,6 +49,8 @@
             android:inputType="text"
             android:lines="1"
             android:paddingStart="13dp"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
             tools:ignore="RtlSymmetry" />
 
         <ImageView
@@ -63,6 +65,21 @@
             android:visibility="gone"
             tools:visibility="visible"/>
     </FrameLayout>
+
+    <TextView
+        android:id="@+id/nothingFoundMessage"
+        style="@style/PlaceHolderStyle"
+        tools:visibility="visible"/>
+
+    <TextView
+        android:id="@+id/somethingWentWrong"
+        style="@style/SomethingWentWrongStyle"
+        tools:visibility="visible"/>
+
+    <Button
+        android:id="@+id/refresh_button"
+        style="@style/RefreshButtonStyle"
+        tools:visibility="visible"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/searchRecyclerView"
