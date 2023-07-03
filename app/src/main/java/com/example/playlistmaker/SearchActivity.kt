@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -24,6 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class SearchActivity : AppCompatActivity() {
     companion object {
         private const val EDIT_TEXT = "EDIT_TEXT"
+        private const val OK_RESPONSE = 200
     }
 
     private val itunesBaseUrl = "https://itunes.apple.com"
@@ -64,10 +66,7 @@ class SearchActivity : AppCompatActivity() {
         val clearButton = findViewById<ImageView>(R.id.clearIcon)
 
         clearButton.setOnClickListener {
-            inputEditText.setText("")
-            tracksList.clear()
-            tracksAdapter.notifyDataSetChanged()
-            hideKeyboard()
+            handleClearButtonClick()
         }
 
         val simpleTextWatcher = object : TextWatcher {
@@ -121,17 +120,16 @@ class SearchActivity : AppCompatActivity() {
                     call: Call<TracksResponse>,
                     response: Response<TracksResponse>
                 ) {
-                    if (response.code() == 200) {
+                    if (response.code() == OK_RESPONSE) {
                         tracksList.clear()
-                        if (response.body()?.results?.isNotEmpty() == true) {
-                            tracksList.addAll(response.body()?.results!!)
-                            tracksAdapter.notifyDataSetChanged()
-                        }
-                        if (tracksList.isEmpty()) {
-                            showNotingFoundMessage(getString(R.string.nothing_found))
-                        } else {
+                        val results = response.body()?.results
+                        if (!results.isNullOrEmpty()) {
                             showNotingFoundMessage("")
                             showSomethingWentWrongMessage("", "")
+                            tracksList.addAll(results)
+                            tracksAdapter.notifyDataSetChanged()
+                        } else {
+                            showNotingFoundMessage(getString(R.string.nothing_found))
                         }
                     } else {
                         showSomethingWentWrongMessage(
@@ -159,14 +157,8 @@ class SearchActivity : AppCompatActivity() {
                 visibility = View.VISIBLE
                 this.text = text
             }
-            arrayListOf(
-                somethingWentWrong,
-                refreshButton
-            ).forEach { view ->
-                if (view.visibility == View.VISIBLE) {
-                    view.visibility = View.GONE
-                }
-            }
+            somethingWentWrong.visibility = View.GONE
+            refreshButton.visibility = View.GONE
         } else {
             nothingFoundMessage.visibility = View.GONE
         }
@@ -189,13 +181,16 @@ class SearchActivity : AppCompatActivity() {
                     .show()
             }
         } else {
-            arrayListOf(
-                somethingWentWrong,
-                refreshButton
-            ).forEach { view ->
-                view.visibility = View.GONE
-            }
+            somethingWentWrong.visibility = View.GONE
+            refreshButton.visibility = View.GONE
         }
+    }
+
+    private fun handleClearButtonClick() {
+        inputEditText.setText("")
+        tracksList.clear()
+        tracksAdapter.notifyDataSetChanged()
+        hideKeyboard()
     }
 
     private fun hideKeyboard() {
