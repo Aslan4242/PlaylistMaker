@@ -9,27 +9,21 @@ import com.google.gson.reflect.TypeToken
 class SearchHistory (private val sharedPreferences: SharedPreferences){
     private var trackListHistory = ArrayList<Track>()
     fun addToHistory(track: Track) {
-        if (trackListHistory.contains(track)) {
-            trackListHistory.remove(track)
-            trackListHistory.add(0,track)
-            saveToSharedPrefs()
-        } else {
+        trackListHistory.remove(track)
             if (trackListHistory.size < 10) {
                 trackListHistory.add(0, track)
-                saveToSharedPrefs()
             } else {
                 trackListHistory.removeAt(9)
                 trackListHistory.add(0, track)
-                saveToSharedPrefs()
             }
-        }
+        saveToSharedPrefs()
     }
     fun clearHistory(){
         trackListHistory.clear()
-        sharedPreferences.edit().remove("track_history").apply()
+        sharedPreferences.edit().remove(TRACK_HISTORY).apply()
     }
     fun getHistory():ArrayList<Track>{
-        val jsonString = sharedPreferences.getString("track_history","")
+        val jsonString = sharedPreferences.getString(TRACK_HISTORY,"")
         val json = GsonBuilder().create()
         val itemType = object : TypeToken<ArrayList<Track>>() {}.type
         trackListHistory = json.fromJson<ArrayList<Track>>(jsonString, itemType) ?: arrayListOf()
@@ -41,7 +35,11 @@ class SearchHistory (private val sharedPreferences: SharedPreferences){
         val jsonString = json.toJson(trackListHistory)
         sharedPreferences
             .edit()
-            .putString("track_history", jsonString)
+            .putString(TRACK_HISTORY, jsonString)
             .apply()
+    }
+
+    companion object {
+        private const val TRACK_HISTORY = "track_history"
     }
 }

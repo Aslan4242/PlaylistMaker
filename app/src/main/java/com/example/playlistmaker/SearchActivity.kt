@@ -26,6 +26,7 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         private const val EDIT_TEXT = "EDIT_TEXT"
         private const val OK_RESPONSE = 200
+        private const val TRACK_HISTORY_PREFERENCES = "track_history_preferences"
     }
 
     private val itunesBaseUrl = "https://itunes.apple.com"
@@ -44,18 +45,20 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var sharedPreferences: SharedPreferences
     private val tracksList = ArrayList<Track>()
     private lateinit var tracksAdapter: TrackAdapter
+    private lateinit var clearButton: ImageView
 
     private lateinit var searchHistoryList: RecyclerView
     private lateinit var searchHistoryTitle: TextView
     private lateinit var searchHistory: SearchHistory
     private lateinit var searchHistoryAdapter: TrackAdapter
+    private lateinit var clearHistoryButton: Button
     private val itunesService = retrofit.create(ITunesApi::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        sharedPreferences = getSharedPreferences("track_history_preferences", Context.MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences(TRACK_HISTORY_PREFERENCES, Context.MODE_PRIVATE)
 
         val backButton = findViewById<ImageButton>(R.id.back_button)
 
@@ -68,10 +71,10 @@ class SearchActivity : AppCompatActivity() {
         inputEditText = findViewById(R.id.search_field)
         songsList = findViewById(R.id.searchRecyclerView)
         refreshButton = findViewById(R.id.refresh_button)
-        val clearButton = findViewById<ImageView>(R.id.clearIcon)
+        clearButton = findViewById(R.id.clearIcon)
         searchHistoryTitle = findViewById(R.id.searchHistory)
         searchHistoryList = findViewById(R.id.historyRecyclerView)
-        val clearHistoryButton = findViewById<Button>(R.id.clearHistory)
+        clearHistoryButton = findViewById(R.id.clearHistory)
 
         clearButton.setOnClickListener {
             handleClearButtonClick()
@@ -85,9 +88,7 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.visibility = clearButtonVisibility(s)
                 editText = s.toString()
-                searchHistoryTitle.visibility = if (inputEditText.hasFocus() && s?.isEmpty() == true) View.VISIBLE else View.GONE
-                clearHistoryButton.visibility = if (inputEditText.hasFocus() && s?.isEmpty() == true) View.VISIBLE else View.GONE
-                searchHistoryList.visibility = if (inputEditText.hasFocus() && s?.isEmpty() == true) View.VISIBLE else View.GONE
+                setHistoryVisibility(inputEditText.hasFocus())
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -112,7 +113,6 @@ class SearchActivity : AppCompatActivity() {
             searchHistory.clearHistory()
             searchHistoryTitle.visibility = View.GONE
             it.visibility = View.GONE
-
         }
 
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
@@ -123,9 +123,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         inputEditText.setOnFocusChangeListener { view, hasFocus ->
-            searchHistoryTitle.visibility = if (hasFocus && inputEditText.text.isEmpty()) View.VISIBLE else View.GONE
-            clearHistoryButton.visibility = if (hasFocus && inputEditText.text.isEmpty()) View.VISIBLE else View.GONE
-            searchHistoryList.visibility = if (hasFocus && inputEditText.text.isEmpty()) View.VISIBLE else View.GONE
+            setHistoryVisibility(hasFocus)
         }
 
         searchHistory = SearchHistory(sharedPreferences)
@@ -146,6 +144,12 @@ class SearchActivity : AppCompatActivity() {
         super.onRestoreInstanceState(savedInstanceState)
         editText = savedInstanceState.getString(EDIT_TEXT)
         inputEditText.setText(editText)
+    }
+
+    private fun setHistoryVisibility(hasFocus: Boolean) {
+        searchHistoryTitle.visibility = if (hasFocus && inputEditText.text.isEmpty() && searchHistory.getHistory().isNotEmpty()) View.VISIBLE else View.GONE
+        clearHistoryButton.visibility = if (hasFocus && inputEditText.text.isEmpty() && searchHistory.getHistory().isNotEmpty()) View.VISIBLE else View.GONE
+        searchHistoryList.visibility = if (hasFocus && inputEditText.text.isEmpty() && searchHistory.getHistory().isNotEmpty()) View.VISIBLE else View.GONE
     }
 
     private fun searchAction() {
@@ -228,7 +232,6 @@ class SearchActivity : AppCompatActivity() {
         hideKeyboard()
         searchHistoryAdapter = TrackAdapter(searchHistory.getHistory())
         searchHistoryList.adapter = searchHistoryAdapter
-        searchHistoryTitle.visibility = View.VISIBLE
     }
 
     private fun hideKeyboard() {
