@@ -94,4 +94,46 @@
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:visibility">gone</item>
     </style>
+
+    <style name="PlayButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">@dimen/space_100</item>
+        <item name="android:layout_height">@dimen/space_100</item>
+        <item name="android:layout_marginTop">@dimen/space_30</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:src">@drawable/ic_play_button_night</item>
+    </style>
+
+    <style name="AddToQueueButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/space_24</item>
+        <item name="android:backgroundTint">@color/transparent</item>
+        <item name="android:src">@drawable/ic_add_to_queue_night</item>
+    </style>
+
+    <style name="AddToFavoriteButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">@dimen/space_24</item>
+        <item name="android:backgroundTint">@color/transparent</item>
+        <item name="android:src">@drawable/ic_add_to_favorite_night</item>
+    </style>
+
+    <style name="TrackInfoFieldStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/space_16</item>
+        <item name="android:layout_marginTop">@dimen/space_30</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textSize">@dimen/text_size_13</item>
+    </style>
+
+    <style name="TrackInfoValueStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">@dimen/space_16</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
+        <item name="android:textSize">@dimen/text_size_13</item>
+    </style>
 </resources>

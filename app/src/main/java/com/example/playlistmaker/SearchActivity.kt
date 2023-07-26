@@ -1,6 +1,7 @@
 package com.example.playlistmaker
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,6 +17,7 @@ import com.example.playlistmaker.api.ITunesApi
 import com.example.playlistmaker.api.TracksResponse
 import com.example.playlistmaker.track.Track
 import com.example.playlistmaker.track.TrackAdapter
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,6 +29,7 @@ class SearchActivity : AppCompatActivity() {
         private const val EDIT_TEXT = "EDIT_TEXT"
         private const val OK_RESPONSE = 200
         private const val TRACK_HISTORY_PREFERENCES = "track_history_preferences"
+        private const val TRACK = "TRACK"
     }
 
     private val itunesBaseUrl = "https://itunes.apple.com"
@@ -96,6 +99,12 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
+        fun startPlayerActivity(track: Track) {
+            val playerIntent = Intent(this, PlayerActivity::class.java)
+            playerIntent.putExtra(TRACK, Gson().toJson(track))
+            startActivity(playerIntent)
+        }
+
         inputEditText.addTextChangedListener(simpleTextWatcher)
 
         songsList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -106,6 +115,7 @@ class SearchActivity : AppCompatActivity() {
         tracksAdapter.setOnItemClickListener(object : TrackAdapter.OnListElementClickListener {
             override fun onListElementClick(position: Int) {
                 searchHistory.addToHistory(tracksAdapter.getTrack(position))
+                startPlayerActivity(tracksAdapter.getTrack(position))
             }
         })
 
@@ -113,6 +123,7 @@ class SearchActivity : AppCompatActivity() {
             searchHistory.clearHistory()
             searchHistoryTitle.visibility = View.GONE
             it.visibility = View.GONE
+            searchHistoryList.visibility = View.GONE
         }
 
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
@@ -129,6 +140,13 @@ class SearchActivity : AppCompatActivity() {
         searchHistory = SearchHistory(sharedPreferences)
         searchHistoryAdapter = TrackAdapter(searchHistory.getHistory())
         searchHistoryList.adapter = searchHistoryAdapter
+
+        searchHistoryAdapter.setOnItemClickListener(object :
+            TrackAdapter.OnListElementClickListener {
+            override fun onListElementClick(position: Int) {
+                startPlayerActivity(searchHistoryAdapter.getTrack(position))
+            }
+        })
 
         refreshButton.setOnClickListener {
             searchAction()
@@ -147,9 +165,18 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun setHistoryVisibility(hasFocus: Boolean) {
-        searchHistoryTitle.visibility = if (hasFocus && inputEditText.text.isEmpty() && searchHistory.getHistory().isNotEmpty()) View.VISIBLE else View.GONE
-        clearHistoryButton.visibility = if (hasFocus && inputEditText.text.isEmpty() && searchHistory.getHistory().isNotEmpty()) View.VISIBLE else View.GONE
-        searchHistoryList.visibility = if (hasFocus && inputEditText.text.isEmpty() && searchHistory.getHistory().isNotEmpty()) View.VISIBLE else View.GONE
+        searchHistoryTitle.visibility =
+            if (hasFocus && inputEditText.text.isEmpty() && searchHistory.getHistory()
+                    .isNotEmpty()
+            ) View.VISIBLE else View.GONE
+        clearHistoryButton.visibility =
+            if (hasFocus && inputEditText.text.isEmpty() && searchHistory.getHistory()
+                    .isNotEmpty()
+            ) View.VISIBLE else View.GONE
+        searchHistoryList.visibility =
+            if (hasFocus && inputEditText.text.isEmpty() && searchHistory.getHistory()
+                    .isNotEmpty()
+            ) View.VISIBLE else View.GONE
     }
 
     private fun searchAction() {
