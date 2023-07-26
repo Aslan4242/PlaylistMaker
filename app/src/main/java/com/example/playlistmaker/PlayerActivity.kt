@@ -86,7 +86,6 @@ class PlayerActivity : AppCompatActivity() {
 
     fun Track.getCoverArtwork() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
 
-
     companion object {
         private const val TRACK = "TRACK"
     }
