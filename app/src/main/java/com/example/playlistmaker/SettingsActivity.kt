@@ -3,33 +3,29 @@ package com.example.playlistmaker
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.ImageButton
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.playlistmaker.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
+    private lateinit var binding: ActivitySettingsBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val backButton = findViewById<ImageButton>(R.id.back_button)
-
-        backButton.setOnClickListener {
+        binding.backButton.setOnClickListener {
             finish()
         }
 
-        val shareAppButton = findViewById<TextView>(R.id.share_app)
-
-        shareAppButton.setOnClickListener {
+        binding.shareApp.setOnClickListener {
             val shareAppIntent = Intent(Intent.ACTION_SEND)
             shareAppIntent.type = "text/plain"
             shareAppIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.course_link))
             startActivity(shareAppIntent)
         }
 
-        val supportButton = findViewById<TextView>(R.id.support)
-
-        supportButton.setOnClickListener {
+        binding.support.setOnClickListener {
             val supportIntent = Intent(Intent.ACTION_SENDTO)
             supportIntent.apply {
                 data = Uri.parse("mailto:")
@@ -40,9 +36,7 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(supportIntent)
         }
 
-        val termsOfUseButton = findViewById<TextView>(R.id.terms_of_use)
-
-        termsOfUseButton.setOnClickListener {
+        binding.termsOfUse.setOnClickListener {
             val url = Uri.parse(getString(R.string.offer_link))
             val termsOfUseIntent = Intent(Intent.ACTION_VIEW, url)
             startActivity(termsOfUseIntent)
