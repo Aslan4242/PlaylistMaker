@@ -5,6 +5,8 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -30,6 +32,8 @@ class SearchActivity : AppCompatActivity() {
         private const val OK_RESPONSE = 200
         private const val TRACK_HISTORY_PREFERENCES = "track_history_preferences"
         private const val TRACK = "TRACK"
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 
     private lateinit var binding: ActivitySearchBinding
@@ -47,6 +51,24 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var searchHistory: SearchHistory
     private lateinit var searchHistoryAdapter: TrackAdapter
     private val itunesService = retrofit.create(ITunesApi::class.java)
+
+    private val handler = Handler(Looper.getMainLooper())
+    private val searchRunnable = Runnable { searchAction() }
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
+    private var isClickAllowed = true
+
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +91,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                searchDebounce()
                 binding.clearIcon.visibility = clearButtonVisibility(s)
                 editText = s.toString()
                 setHistoryVisibility(binding.searchField.hasFocus())
@@ -80,14 +103,17 @@ class SearchActivity : AppCompatActivity() {
         }
 
         fun startPlayerActivity(track: Track) {
-            val playerIntent = Intent(this, PlayerActivity::class.java)
-            playerIntent.putExtra(TRACK, Gson().toJson(track))
-            startActivity(playerIntent)
+            if (clickDebounce()) {
+                val playerIntent = Intent(this, PlayerActivity::class.java)
+                playerIntent.putExtra(TRACK, Gson().toJson(track))
+                startActivity(playerIntent)
+            }
         }
 
         binding.searchField.addTextChangedListener(simpleTextWatcher)
 
-        binding.searchRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.searchRecyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         tracksAdapter = TrackAdapter(tracksList)
         tracksAdapter.tracks = tracksList
         binding.searchRecyclerView.adapter = tracksAdapter
@@ -160,39 +186,65 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun searchAction() {
-        itunesService.search(binding.searchField.text.toString())
-            .enqueue(object : Callback<TracksResponse> {
-                override fun onResponse(
-                    call: Call<TracksResponse>,
-                    response: Response<TracksResponse>
-                ) {
-                    if (response.code() == OK_RESPONSE) {
-                        tracksList.clear()
-                        val results = response.body()?.results
-                        if (!results.isNullOrEmpty()) {
-                            showNotingFoundMessage("")
-                            showSomethingWentWrongMessage("", "")
-                            tracksList.addAll(results)
-                            tracksAdapter.notifyDataSetChanged()
+        if (binding.searchField.text.isNotEmpty()) {
+            searchInProgress()
+
+            itunesService.search(binding.searchField.text.toString())
+                .enqueue(object : Callback<TracksResponse> {
+                    override fun onResponse(
+                        call: Call<TracksResponse>,
+                        response: Response<TracksResponse>
+                    ) {
+                        searchIsDone()
+                        if (response.code() == OK_RESPONSE) {
+                            tracksList.clear()
+                            val results = response.body()?.results
+                            if (!results.isNullOrEmpty()) {
+                                showNotingFoundMessage("")
+                                showSomethingWentWrongMessage("", "")
+                                tracksList.addAll(results)
+                                tracksAdapter.notifyDataSetChanged()
+                            } else {
+                                showNotingFoundMessage(getString(R.string.nothing_found))
+                            }
                         } else {
-                            showNotingFoundMessage(getString(R.string.nothing_found))
+                            searchIsDone()
+                            showSomethingWentWrongMessage(
+                                getString(R.string.something_went_wrong),
+                                response.code().toString()
+                            )
                         }
-                    } else {
+                    }
+
+                    override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
                         showSomethingWentWrongMessage(
                             getString(R.string.something_went_wrong),
-                            response.code().toString()
+                            t.message.toString()
                         )
                     }
                 }
+                )
+        }
+    }
 
-                override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
-                    showSomethingWentWrongMessage(
-                        getString(R.string.something_went_wrong),
-                        t.message.toString()
-                    )
-                }
-            }
-            )
+    private fun searchInProgress() {
+        binding.progressBar.visibility = View.VISIBLE
+        binding.apply {
+            somethingWentWrong.visibility = View.GONE
+            nothingFoundMessage.visibility = View.GONE
+            searchRecyclerView.visibility = View.GONE
+            refreshButton.visibility = View.GONE
+        }
+    }
+
+    private fun searchIsDone() {
+        binding.progressBar.visibility = View.GONE
+        binding.apply {
+            somethingWentWrong.visibility = View.VISIBLE
+            nothingFoundMessage.visibility = View.VISIBLE
+            searchRecyclerView.visibility = View.VISIBLE
+            refreshButton.visibility = View.VISIBLE
+        }
     }
 
     private fun showNotingFoundMessage(text: String) {

@@ -33,6 +33,7 @@
     <dimen name="space_82">82dp</dimen>
     <dimen name="space_100">100dp</dimen>
     <dimen name="space_102">102dp</dimen>
+    <dimen name="space_140">140dp</dimen>
     <dimen name="track_margin_vertical">8dp</dimen>
     <dimen name="track_data_text_size">11sp</dimen>
     <dimen name="text_size_13">13sp</dimen>
