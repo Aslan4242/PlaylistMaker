@@ -18,7 +18,7 @@ import java.util.*
 class PlayerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPlayerBinding
     private lateinit var track: Track
-    private var mediaPlayer = MediaPlayer()
+    private var mediaPlayer: MediaPlayer? = MediaPlayer()
     private var playerState = STATE_DEFAULT
 
     private val handler = Handler(Looper.getMainLooper())
@@ -49,7 +49,8 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.release()
+        mediaPlayer?.release()
+        mediaPlayer = null
         handler.removeCallbacks(updateProgressTimeRunnable)
     }
 
@@ -87,13 +88,13 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun preparePlayer() {
-        mediaPlayer.setDataSource(track.previewUrl)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
+        mediaPlayer?.setDataSource(track.previewUrl)
+        mediaPlayer?.prepareAsync()
+        mediaPlayer?.setOnPreparedListener {
             binding.playButton.isEnabled = true
             playerState = STATE_PREPARED
         }
-        mediaPlayer.setOnCompletionListener {
+        mediaPlayer?.setOnCompletionListener {
             playerState = STATE_PREPARED
             binding.playButton.apply {
                 if (isNightModeOn()) {
@@ -115,7 +116,7 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun startPlayer() {
-        mediaPlayer.start()
+        mediaPlayer?.start()
         binding.playButton.apply {
             if (isNightModeOn()) {
                 setImageResource(R.drawable.ic_pause_button_night)
@@ -130,7 +131,7 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun pausePlayer() {
-        mediaPlayer.pause()
+        mediaPlayer?.pause()
         binding.playButton.apply {
             if (isNightModeOn()) {
                 setImageResource(R.drawable.ic_play_button_night)
@@ -155,7 +156,7 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun updateProgressTime() {
         val currentPosition =
-            SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+            SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer?.currentPosition)
         binding.progressTime.text = currentPosition
         handler.postDelayed(updateProgressTimeRunnable, UPDATE_PROGRESS_TIME_DELAY)
 
