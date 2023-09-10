@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation.ui
 
 import android.content.Context
 import android.content.Intent
@@ -14,22 +14,18 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.playlistmaker.api.ITunesApi
-import com.example.playlistmaker.api.TracksResponse
+import com.example.playlistmaker.Creator
+import com.example.playlistmaker.R
+import com.example.playlistmaker.data.SearchHistory
 import com.example.playlistmaker.databinding.ActivitySearchBinding
-import com.example.playlistmaker.track.Track
-import com.example.playlistmaker.track.TrackAdapter
+import com.example.playlistmaker.domain.api.TracksInteractor
+import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.presentation.TrackAdapter
 import com.google.gson.Gson
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
     companion object {
         private const val EDIT_TEXT = "EDIT_TEXT"
-        private const val OK_RESPONSE = 200
         private const val TRACK_HISTORY_PREFERENCES = "track_history_preferences"
         private const val TRACK = "TRACK"
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
@@ -37,12 +33,6 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivitySearchBinding
-    private val itunesBaseUrl = "https://itunes.apple.com"
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(itunesBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
 
     private var editText: String? = null
     private lateinit var sharedPreferences: SharedPreferences
@@ -50,7 +40,8 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var tracksAdapter: TrackAdapter
     private lateinit var searchHistory: SearchHistory
     private lateinit var searchHistoryAdapter: TrackAdapter
-    private val itunesService = retrofit.create(ITunesApi::class.java)
+
+    private val trackProvider = Creator.provideTracksInteractor()
 
     private val handler = Handler(Looper.getMainLooper())
     private val searchRunnable = Runnable { searchAction() }
@@ -188,42 +179,40 @@ class SearchActivity : AppCompatActivity() {
     private fun searchAction() {
         if (binding.searchField.text.isNotEmpty()) {
             searchInProgress()
-
-            itunesService.search(binding.searchField.text.toString())
-                .enqueue(object : Callback<TracksResponse> {
-                    override fun onResponse(
-                        call: Call<TracksResponse>,
-                        response: Response<TracksResponse>
-                    ) {
-                        searchIsDone()
-                        if (response.code() == OK_RESPONSE) {
-                            tracksList.clear()
-                            val results = response.body()?.results
-                            if (!results.isNullOrEmpty()) {
+            trackProvider.search(
+                binding.searchField.text.toString(), object : TracksInteractor.TracksConsumer {
+                    override fun consume(foundTracks: List<Track>) {
+                        if (foundTracks.isNotEmpty()) {
+                            handler.post {
+                                searchIsDone()
                                 showNotingFoundMessage("")
                                 showSomethingWentWrongMessage("", "")
-                                tracksList.addAll(results)
+                                tracksList.addAll(foundTracks)
                                 tracksAdapter.notifyDataSetChanged()
-                            } else {
-                                showNotingFoundMessage(getString(R.string.nothing_found))
                             }
-                        } else {
-                            searchIsDone()
-                            showSomethingWentWrongMessage(
-                                getString(R.string.something_went_wrong),
-                                response.code().toString()
-                            )
                         }
                     }
 
-                    override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
-                        showSomethingWentWrongMessage(
-                            getString(R.string.something_went_wrong),
-                            t.message.toString()
-                        )
+                    override fun onSuccess() {
+                        tracksList.clear()
                     }
-                }
-                )
+
+                    override fun onEmpty() {
+                        handler.post {
+                            showNotingFoundMessage(getString(R.string.nothing_found))
+                        }
+                    }
+
+                    override fun onFailure(message: String) {
+                        handler.post {
+                            searchIsDone()
+                            showSomethingWentWrongMessage(
+                                getString(R.string.something_went_wrong),
+                                message
+                            )
+                        }
+                    }
+                })
         }
     }
 

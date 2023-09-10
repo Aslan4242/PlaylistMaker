@@ -1,7 +1,6 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation.ui
 
 import android.content.res.Configuration
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -9,8 +8,11 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.Creator
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
-import com.example.playlistmaker.track.Track
+import com.example.playlistmaker.domain.api.PlayerInteractor
+import com.example.playlistmaker.domain.models.Track
 import com.google.gson.Gson
 import java.text.SimpleDateFormat
 import java.util.*
@@ -18,11 +20,11 @@ import java.util.*
 class PlayerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPlayerBinding
     private lateinit var track: Track
-    private var mediaPlayer: MediaPlayer? = MediaPlayer()
-    private var playerState = STATE_DEFAULT
 
     private val handler = Handler(Looper.getMainLooper())
     private val updateProgressTimeRunnable = Runnable { updateProgressTime() }
+
+    private var player: PlayerInteractor? = Creator.providePlayerInteractor()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +38,7 @@ class PlayerActivity : AppCompatActivity() {
         getTrack(track)
 
         binding.playButton.setOnClickListener {
-            playbackControl()
+            player?.playbackControl({ startPlayer() }, { pausePlayer() })
         }
 
         preparePlayer()
@@ -49,8 +51,8 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer?.release()
-        mediaPlayer = null
+        player?.release()
+        player = null
         handler.removeCallbacks(updateProgressTimeRunnable)
     }
 
@@ -88,24 +90,22 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun preparePlayer() {
-        mediaPlayer?.setDataSource(track.previewUrl)
-        mediaPlayer?.prepareAsync()
-        mediaPlayer?.setOnPreparedListener {
-            binding.playButton.isEnabled = true
-            playerState = STATE_PREPARED
-        }
-        mediaPlayer?.setOnCompletionListener {
-            playerState = STATE_PREPARED
-            binding.playButton.apply {
-                if (isNightModeOn()) {
-                    setImageResource(R.drawable.ic_play_button_night)
-                } else {
-                    setImageResource(R.drawable.ic_play_button)
+        player?.preparePlayer(track.previewUrl,
+            {
+                binding.playButton.isEnabled = true
+            },
+            {
+                binding.playButton.apply {
+                    if (isNightModeOn()) {
+                        setImageResource(R.drawable.ic_play_button_night)
+                    } else {
+                        setImageResource(R.drawable.ic_play_button)
+                    }
                 }
+                binding.progressTime.text = getString(R.string.time_zero)
+                handler.removeCallbacks(updateProgressTimeRunnable)
             }
-            binding.progressTime.text = getString(R.string.time_zero)
-            handler.removeCallbacks(updateProgressTimeRunnable)
-        }
+        )
     }
 
     private fun isNightModeOn(): Boolean {
@@ -116,7 +116,6 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun startPlayer() {
-        mediaPlayer?.start()
         binding.playButton.apply {
             if (isNightModeOn()) {
                 setImageResource(R.drawable.ic_pause_button_night)
@@ -127,11 +126,9 @@ class PlayerActivity : AppCompatActivity() {
         handler.post(
             updateProgressTimeRunnable
         )
-        playerState = STATE_PLAYING
     }
 
     private fun pausePlayer() {
-        mediaPlayer?.pause()
         binding.playButton.apply {
             if (isNightModeOn()) {
                 setImageResource(R.drawable.ic_play_button_night)
@@ -140,23 +137,11 @@ class PlayerActivity : AppCompatActivity() {
             }
         }
         handler.removeCallbacks(updateProgressTimeRunnable)
-        playerState = STATE_PAUSED
-    }
-
-    private fun playbackControl() {
-        when (playerState) {
-            STATE_PLAYING -> {
-                pausePlayer()
-            }
-            STATE_PREPARED, STATE_PAUSED -> {
-                startPlayer()
-            }
-        }
     }
 
     private fun updateProgressTime() {
         val currentPosition =
-            SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer?.currentPosition)
+            SimpleDateFormat("mm:ss", Locale.getDefault()).format(player?.getCurrentPosition())
         binding.progressTime.text = currentPosition
         handler.postDelayed(updateProgressTimeRunnable, UPDATE_PROGRESS_TIME_DELAY)
 
@@ -164,10 +149,6 @@ class PlayerActivity : AppCompatActivity() {
 
     companion object {
         private const val TRACK = "TRACK"
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
         private const val UPDATE_PROGRESS_TIME_DELAY = 200L
     }
 }
