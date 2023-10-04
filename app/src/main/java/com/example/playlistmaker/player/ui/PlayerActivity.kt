@@ -16,13 +16,11 @@ import com.example.playlistmaker.player.presentation.models.ParcelableTrack
 import com.example.playlistmaker.player.presentation.models.PlayerScreenState
 import com.example.playlistmaker.player.presentation.view_model.PlayerViewModel
 import com.example.playlistmaker.search.domain.models.Track
-import com.google.gson.Gson
 import java.text.SimpleDateFormat
 import java.util.*
 
 class PlayerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPlayerBinding
-    private lateinit var track: Track
     private lateinit var viewModel: PlayerViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +32,7 @@ class PlayerActivity : AppCompatActivity() {
             finish()
         }
 
-        track = getCurrentTrack()
+        val track = getCurrentTrack()
         getTrack(track)
 
         viewModel = ViewModelProvider(
@@ -54,17 +52,6 @@ class PlayerActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         viewModel.pausePlayer()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(TRACK, Gson().toJson(track))
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        track = Gson().fromJson(savedInstanceState.getString(TRACK), Track::class.java)
-        getTrack(track)
     }
 
     private fun render(state: PlayerScreenState) {

@@ -22,7 +22,6 @@ class PlayerViewModel(private val track: Track, private val playerInteractor: Pl
     private val stateLiveData = MutableLiveData<PlayerScreenState>()
     private var currentTime: String? = null
     private val handler = Handler(Looper.getMainLooper())
-    private var currentPosition: String? = null
 
     init {
         preparePlayer()
@@ -68,7 +67,7 @@ class PlayerViewModel(private val track: Track, private val playerInteractor: Pl
     private val updateProgressTimeRunnable = Runnable { updateProgressTime() }
 
     private fun updateProgressTime() {
-        currentPosition = getCurrentTrackPosition()
+        currentTime = getCurrentTrackPosition()
         handler.postDelayed(updateProgressTimeRunnable, UPDATE_PROGRESS_TIME_DELAY)
         setState(PlayerScreenState.Progress(getCurrentTrackPosition()))
     }

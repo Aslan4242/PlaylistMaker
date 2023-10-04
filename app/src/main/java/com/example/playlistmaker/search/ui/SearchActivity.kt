@@ -72,6 +72,7 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.clearIcon.visibility = clearButtonVisibility(s)
+                editText = s.toString()
                 viewModel.onEditTextChanged(binding.searchField.hasFocus(), s.toString())
             }
 
