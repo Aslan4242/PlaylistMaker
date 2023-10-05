@@ -2,20 +2,16 @@ package com.example.playlistmaker.player.presentation.view_model
 
 import android.os.Handler
 import android.os.Looper
-import androidx.core.content.res.TypedArrayUtils.getString
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.player.domain.api.PlayerInteractor
 import com.example.playlistmaker.player.presentation.models.PlayerScreenState
 import com.example.playlistmaker.search.domain.models.Track
-import java.text.SimpleDateFormat
-import java.util.*
 
 class PlayerViewModel(private val track: Track, private val playerInteractor: PlayerInteractor) : ViewModel() {
 

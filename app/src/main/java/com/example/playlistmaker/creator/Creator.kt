@@ -24,8 +24,8 @@ object Creator {
         return ExternalNavigatorImpl(context)
     }
 
-    private fun getHistoryRepository(sharedPreferences: SharedPreferences): HistoryRepository {
-        return HistoryRepositoryImpl(sharedPreferences)
+    private fun getHistoryRepository(context: Context): HistoryRepository {
+        return HistoryRepositoryImpl(context)
     }
 
     private fun getTracksRepository(): TracksRepository {
@@ -44,7 +44,7 @@ object Creator {
         return  SharingInteractorImpl(getExternalNavigator(context))
     }
 
-    fun provideHistoryInteractorImpl(sharedPreferences: SharedPreferences): HistoryInteractor {
-        return HistoryInteractorImpl(getHistoryRepository(sharedPreferences))
+    fun provideHistoryInteractorImpl(context: Context): HistoryInteractor {
+        return HistoryInteractorImpl(getHistoryRepository(context))
     }
 }

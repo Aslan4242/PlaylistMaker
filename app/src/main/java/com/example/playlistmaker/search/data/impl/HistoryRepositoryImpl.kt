@@ -1,13 +1,15 @@
 package com.example.playlistmaker.search.data.impl
 
-import android.content.SharedPreferences
+import android.content.Context
 import com.example.playlistmaker.search.domain.api.HistoryRepository
 import com.example.playlistmaker.search.domain.models.Track
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 
-class HistoryRepositoryImpl(private val sharedPreferences: SharedPreferences) : HistoryRepository {
+class HistoryRepositoryImpl(context: Context) : HistoryRepository {
+
+    private var sharedPreferences = context.getSharedPreferences(TRACK_HISTORY_PREFERENCES, Context.MODE_PRIVATE)
 
     override fun saveToSharedPrefs(trackList: ArrayList<Track>) {
         val json = Gson()
@@ -31,5 +33,6 @@ class HistoryRepositoryImpl(private val sharedPreferences: SharedPreferences) : 
 
     companion object {
         private const val TRACK_HISTORY = "track_history"
+        private const val TRACK_HISTORY_PREFERENCES = "track_history_preferences"
     }
 }

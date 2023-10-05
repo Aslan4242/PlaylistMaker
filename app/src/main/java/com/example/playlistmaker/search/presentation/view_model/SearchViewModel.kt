@@ -1,6 +1,6 @@
 package com.example.playlistmaker.search.presentation.view_model
 
-import android.content.SharedPreferences
+import android.app.Application
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.LiveData
@@ -24,11 +24,13 @@ class SearchViewModel(
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private const val CLICK_DEBOUNCE_DELAY = 1000L
 
-        fun getViewModelFactory(sharedPreferences: SharedPreferences): ViewModelProvider.Factory = viewModelFactory {
+        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
+                val application =
+                    this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application
                 SearchViewModel(
                     Creator.provideTracksInteractor(),
-                    Creator.provideHistoryInteractorImpl(sharedPreferences)
+                    Creator.provideHistoryInteractorImpl(application)
                 )
             }
         }
@@ -72,28 +74,28 @@ class SearchViewModel(
         if (searchText.isNotEmpty()) {
             setState(SearchScreenState.Progress)
             tracksInteractor.search(searchText, object : TracksInteractor.TracksConsumer {
-                    override fun consume(foundTracks: ArrayList<Track>?, errorMessage: String?) {
-                        val tracks = ArrayList<Track>()
+                override fun consume(foundTracks: ArrayList<Track>?, errorMessage: String?) {
+                    val tracks = ArrayList<Track>()
 
-                        if (foundTracks != null) {
-                                tracks.addAll(foundTracks)
+                    if (foundTracks != null) {
+                        tracks.addAll(foundTracks)
+                    }
+
+                    when {
+                        errorMessage != null -> {
+                            setState(SearchScreenState.Error)
                         }
 
-                        when {
-                            errorMessage != null -> {
-                                setState(SearchScreenState.Error)
-                            }
+                        tracks.isEmpty() -> {
+                            setState(SearchScreenState.Empty)
+                        }
 
-                            tracks.isEmpty() -> {
-                                setState(SearchScreenState.Empty)
-                            }
-
-                            else -> {
-                                setState(SearchScreenState.List(tracks = tracks))
-                            }
+                        else -> {
+                            setState(SearchScreenState.List(tracks = tracks))
                         }
                     }
-                })
+                }
+            })
         }
     }
 
@@ -123,13 +125,12 @@ class SearchViewModel(
 
     fun onEditFocusChange(hasFocus: Boolean) {
         val tracks = getHistoryTrackList()
-            if (hasFocus && currentSearchText.isNullOrEmpty() && tracks.size > 0) {
-                setState(SearchScreenState.History(tracks))
-            }  else {
-                setState(SearchScreenState.History(tracks)) // поправить
-            }
+        if (hasFocus && currentSearchText.isNullOrEmpty() && tracks.size > 0) {
+            setState(SearchScreenState.History(tracks))
+        } else {
+            setState(SearchScreenState.History(tracks))
+        }
     }
-
 
 
     private fun getHistoryTrackList(): ArrayList<Track> {
@@ -138,6 +139,11 @@ class SearchViewModel(
 
     fun addTrackToSearchHistory(track: Track) {
         historyInteractor.addTrackToSearchHistory(track)
+    }
+
+    fun onClearSearchHistoryButtonClick() {
+        historyInteractor.clearSearchHistory()
+        setState(SearchScreenState.List(ArrayList()))
     }
 
     fun showPlayer(track: Track) {

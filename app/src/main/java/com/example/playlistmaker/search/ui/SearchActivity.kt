@@ -1,7 +1,6 @@
 package com.example.playlistmaker.search.ui
 
 import android.content.Context
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -22,15 +21,12 @@ import com.example.playlistmaker.search.presentation.view_model.SearchViewModel
 class SearchActivity : AppCompatActivity() {
     companion object {
         private const val EDIT_TEXT = "EDIT_TEXT"
-        private const val TRACK_HISTORY_PREFERENCES = "track_history_preferences"
     }
-
-    private lateinit var sharedPreferences: SharedPreferences
 
     private val viewModel: SearchViewModel by lazy {
         ViewModelProvider(
             this,
-            SearchViewModel.getViewModelFactory(sharedPreferences)
+            SearchViewModel.getViewModelFactory()
         )[SearchViewModel::class.java]
     }
 
@@ -39,15 +35,12 @@ class SearchActivity : AppCompatActivity() {
     private var editText: String? = null
     private val tracksList = ArrayList<Track>()
     private lateinit var tracksAdapter: TrackAdapter
-    private lateinit var historyRepositoryImpl: HistoryRepositoryImpl
     private lateinit var searchHistoryAdapter: TrackAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        sharedPreferences = getSharedPreferences(TRACK_HISTORY_PREFERENCES, Context.MODE_PRIVATE)
 
         viewModel.observeState().observe(this) {
             render(it)
@@ -97,7 +90,7 @@ class SearchActivity : AppCompatActivity() {
         })
 
         binding.clearHistory.setOnClickListener {
-            historyRepositoryImpl.clearHistory()
+            viewModel.onClearSearchHistoryButtonClick()
             binding.searchHistory.visibility = View.GONE
             it.visibility = View.GONE
             binding.historyRecyclerView.visibility = View.GONE
@@ -114,8 +107,7 @@ class SearchActivity : AppCompatActivity() {
             viewModel.onEditFocusChange(hasFocus)
         }
 
-        historyRepositoryImpl = HistoryRepositoryImpl(sharedPreferences)
-        searchHistoryAdapter = TrackAdapter(historyRepositoryImpl.getHistory())
+        searchHistoryAdapter = TrackAdapter(ArrayList())
         binding.historyRecyclerView.adapter = searchHistoryAdapter
 
         searchHistoryAdapter.setOnItemClickListener(object :
