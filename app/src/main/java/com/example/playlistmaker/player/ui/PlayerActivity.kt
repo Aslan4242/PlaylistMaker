@@ -40,7 +40,7 @@ class PlayerActivity : AppCompatActivity() {
             PlayerViewModel.factory(track)
         )[PlayerViewModel::class.java]
 
-        viewModel.observeState().observe(this) {
+        viewModel.state().observe(this) {
             render(it)
         }
 

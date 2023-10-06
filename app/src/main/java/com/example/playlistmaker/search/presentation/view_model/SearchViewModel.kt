@@ -20,24 +20,8 @@ class SearchViewModel(
     private val tracksInteractor: TracksInteractor,
     private val historyInteractor: HistoryInteractor
 ) : ViewModel() {
-    companion object {
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
-
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val application =
-                    this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application
-                SearchViewModel(
-                    Creator.provideTracksInteractor(),
-                    Creator.provideHistoryInteractorImpl(application)
-                )
-            }
-        }
-    }
-
-    private val stateLiveData = MutableLiveData<SearchScreenState>()
-    fun observeState(): LiveData<SearchScreenState> = stateLiveData
+    private val _state = MutableLiveData<SearchScreenState>()
+    fun state(): LiveData<SearchScreenState> = _state
 
     private val showPlayerTrigger = SingleEventLiveData<Track>()
     fun getShowPlayerTrigger(): LiveData<Track> = showPlayerTrigger
@@ -100,7 +84,7 @@ class SearchViewModel(
     }
 
     private fun setState(state: SearchScreenState) {
-        stateLiveData.postValue(state)
+        _state.postValue(state)
     }
 
     fun onEditTextChanged(hasFocus: Boolean, text: String?) {
@@ -113,8 +97,8 @@ class SearchViewModel(
             searchDebounce(currentSearchText ?: "")
             setState(
                 SearchScreenState.List(
-                    if (stateLiveData.value is SearchScreenState.List) {
-                        (stateLiveData.value as SearchScreenState.List).tracks
+                    if (_state.value is SearchScreenState.List) {
+                        (_state.value as SearchScreenState.List).tracks
                     } else {
                         ArrayList()
                     }
@@ -159,5 +143,21 @@ class SearchViewModel(
             handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
         }
         return current
+    }
+
+    companion object {
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
+
+        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val application =
+                    this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application
+                SearchViewModel(
+                    Creator.provideTracksInteractor(),
+                    Creator.provideHistoryInteractorImpl(application)
+                )
+            }
+        }
     }
 }

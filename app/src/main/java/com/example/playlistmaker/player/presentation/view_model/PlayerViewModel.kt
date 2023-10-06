@@ -15,7 +15,7 @@ import com.example.playlistmaker.search.domain.models.Track
 
 class PlayerViewModel(private val track: Track, private val playerInteractor: PlayerInteractor) : ViewModel() {
 
-    private val stateLiveData = MutableLiveData<PlayerScreenState>()
+    private val _state = MutableLiveData<PlayerScreenState>()
     private var currentTime: String? = null
     private val handler = Handler(Looper.getMainLooper())
 
@@ -23,10 +23,10 @@ class PlayerViewModel(private val track: Track, private val playerInteractor: Pl
         preparePlayer()
     }
 
-    fun observeState(): LiveData<PlayerScreenState> = stateLiveData
+    fun state(): LiveData<PlayerScreenState> = _state
 
     private fun setState(state: PlayerScreenState) {
-        stateLiveData.postValue(state)
+        _state.postValue(state)
     }
 
     private fun preparePlayer() {

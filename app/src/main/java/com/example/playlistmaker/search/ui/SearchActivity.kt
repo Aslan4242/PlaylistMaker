@@ -11,7 +11,6 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.playlistmaker.search.data.impl.HistoryRepositoryImpl
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.player.ui.PlayerActivity
@@ -42,7 +41,7 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel.observeState().observe(this) {
+        viewModel.state().observe(this) {
             render(it)
         }
 
@@ -146,7 +145,7 @@ class SearchActivity : AppCompatActivity() {
     private fun hideKeyboard() {
         val inputMethodManager =
             getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-        val focus = this.currentFocus
+        val focus = currentFocus
         inputMethodManager?.hideSoftInputFromWindow(focus?.windowToken, 0)
     }
 
