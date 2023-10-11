@@ -6,7 +6,6 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
@@ -16,6 +15,8 @@ import com.example.playlistmaker.player.presentation.models.ParcelableTrack
 import com.example.playlistmaker.player.presentation.models.PlayerScreenState
 import com.example.playlistmaker.player.presentation.view_model.PlayerViewModel
 import com.example.playlistmaker.search.domain.models.Track
+import org.koin.android.ext.android.getKoin
+import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -34,11 +35,7 @@ class PlayerActivity : AppCompatActivity() {
 
         val track = getCurrentTrack()
         getTrack(track)
-
-        viewModel = ViewModelProvider(
-            this,
-            PlayerViewModel.factory(track)
-        )[PlayerViewModel::class.java]
+        viewModel = getKoin().get { parametersOf(track) }
 
         viewModel.state().observe(this) {
             render(it)

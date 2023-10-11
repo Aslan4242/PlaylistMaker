@@ -9,28 +9,21 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.player.ui.PlayerActivity
 import com.example.playlistmaker.search.presentation.models.SearchScreenState
 import com.example.playlistmaker.search.presentation.view_model.SearchViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
     companion object {
         private const val EDIT_TEXT = "EDIT_TEXT"
     }
 
-    private val viewModel: SearchViewModel by lazy {
-        ViewModelProvider(
-            this,
-            SearchViewModel.getViewModelFactory()
-        )[SearchViewModel::class.java]
-    }
-
     private lateinit var binding: ActivitySearchBinding
-
+    private val viewModel: SearchViewModel by viewModel()
     private var editText: String? = null
     private val tracksList = ArrayList<Track>()
     private lateinit var tracksAdapter: TrackAdapter
