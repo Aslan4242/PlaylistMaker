@@ -3,6 +3,11 @@
     <string name="settings">Настройки</string>
     <string name="search_button">Поиск</string>
     <string name="media_button">Медиатека</string>
+    <string name="new_playlist">Новый плейлист</string>
+    <string name="your_media_is_empty">Ваша медиатека пуста</string>
+    <string name="there_are_no_playlists">Вы не создали\nни одного плейлиста</string>
+    <string name="favorite_tracks_tab">Избранные треки</string>
+    <string name="playlists_tab">Плейлисты</string>
     <string name="settings_button">Настройки</string>
     <string name="night_theme">Темная тема</string>
     <string name="share_app">Поделиться приложением</string>
