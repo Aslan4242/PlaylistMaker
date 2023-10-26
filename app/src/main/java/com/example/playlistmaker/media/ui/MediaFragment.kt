@@ -6,18 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.playlistmaker.R
+import com.example.playlistmaker.databinding.FragmentFavouritesBinding
 import com.example.playlistmaker.databinding.FragmentMediaBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MediaFragment : Fragment() {
-    private lateinit var binding: FragmentMediaBinding
+    private var _binding: FragmentMediaBinding? = null
+    private val binding get() = _binding!!
     private lateinit var tabLayoutMediator: TabLayoutMediator
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMediaBinding.inflate(layoutInflater)
+        _binding = FragmentMediaBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -36,7 +38,8 @@ class MediaFragment : Fragment() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         tabLayoutMediator.detach()
+        _binding = null
+        super.onDestroy()
     }
 }
