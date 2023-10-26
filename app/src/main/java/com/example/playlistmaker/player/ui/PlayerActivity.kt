@@ -1,11 +1,10 @@
 package com.example.playlistmaker.player.ui
 
-import android.content.Context
-import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
@@ -140,11 +139,14 @@ class PlayerActivity : AppCompatActivity() {
     companion object {
         private const val TRACK = "TRACK"
 
-        fun show(context: Context, track: Track) {
-            val intent = Intent(context, PlayerActivity::class.java)
-            intent.putExtra(TRACK, ParcelableTrackMapper.map(track))
+        fun createArgs(track: Track): Bundle =
+            bundleOf(TRACK to ParcelableTrackMapper.map(track))
 
-            context.startActivity(intent)
-        }
+//        fun show(context: Context, track: Track) {
+//            val intent = Intent(context, PlayerActivity::class.java)
+//            intent.putExtra(TRACK, ParcelableTrackMapper.map(track))
+//
+//            context.startActivity(intent)
+//        }
     }
 }
