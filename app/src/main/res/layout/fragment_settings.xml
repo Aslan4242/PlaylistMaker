@@ -9,34 +9,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/space_40">
-
-        <ImageButton
-            android:id="@+id/back_button"
-            style="@style/BackButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space_20"
-            android:paddingTop="@dimen/space_20"
-            app:srcCompat="@drawable/ic_arrow_back" />
+        android:paddingBottom="@dimen/space_24">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_vertical"
             android:paddingTop="@dimen/padding_top"
+            android:paddingBottom="@dimen/space_16"
             android:text="@string/settings"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textSize="22sp" />
 
     </LinearLayout>
 
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/settings_margin_horizontal"
-        android:layout_marginBottom="@dimen/settings_margin_top_bottom"
-        android:paddingRight="-12dp"
+        android:paddingStart="@dimen/space_16"
+        android:paddingEnd="@dimen/space_9"
         android:text="@string/night_theme" />
 
     <TextView
