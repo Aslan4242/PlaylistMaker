@@ -26,6 +26,14 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.switcher.setOnCheckedChangeListener { switcher, checked ->
+            viewModel.onSwitchThemeBtnClick(checked)
+        }
+
+        viewModel.observeAppTheme().observe(this.viewLifecycleOwner) { isChecked ->
+            binding.switcher.isChecked = isChecked
+        }
+
         binding.shareApp.setOnClickListener {
             viewModel.onShareAppBtnClick()
         }

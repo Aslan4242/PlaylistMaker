@@ -15,7 +15,7 @@ val viewModelModule = module {
     }
 
     viewModel {
-        SettingsViewModel(get(), get())
+        SettingsViewModel(get(), get(), get())
     }
 
     viewModel { (track: Track) ->
