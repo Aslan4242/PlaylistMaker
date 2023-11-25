@@ -1,49 +1,56 @@
 package com.example.playlistmaker.search.ui
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.playlistmaker.databinding.ActivitySearchBinding
+import com.example.playlistmaker.R
+import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.player.ui.PlayerActivity
 import com.example.playlistmaker.search.presentation.models.SearchScreenState
 import com.example.playlistmaker.search.presentation.view_model.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
     companion object {
         private const val EDIT_TEXT = "EDIT_TEXT"
     }
 
-    private lateinit var binding: ActivitySearchBinding
+    private lateinit var binding: FragmentSearchBinding
     private val viewModel: SearchViewModel by viewModel()
     private var editText: String? = null
     private val tracksList = ArrayList<Track>()
     private lateinit var tracksAdapter: TrackAdapter
     private lateinit var searchHistoryAdapter: TrackAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View  {
+        binding = FragmentSearchBinding.inflate(layoutInflater)
+        return binding.root
+    }
 
-        viewModel.state().observe(this) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.state().observe(viewLifecycleOwner) {
             render(it)
         }
 
-        viewModel.getShowPlayerTrigger().observe(this) {
+        viewModel.getShowPlayerTrigger().observe(viewLifecycleOwner) {
             showPlayerActivity(it)
-        }
-
-        binding.backButton.setOnClickListener {
-            finish()
         }
 
         binding.clearIcon.setOnClickListener {
@@ -69,7 +76,7 @@ class SearchActivity : AppCompatActivity() {
         binding.searchField.addTextChangedListener(simpleTextWatcher)
 
         binding.searchRecyclerView.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         tracksAdapter = TrackAdapter(tracksList)
         tracksAdapter.tracks = tracksList
         binding.searchRecyclerView.adapter = tracksAdapter
@@ -119,27 +126,28 @@ class SearchActivity : AppCompatActivity() {
         outState.putString(EDIT_TEXT, editText)
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        editText = savedInstanceState.getString(EDIT_TEXT)
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        editText = savedInstanceState?.getString(EDIT_TEXT)
         binding.searchField.setText(editText)
     }
 
     private fun showPlayerActivity(track: Track) {
-        PlayerActivity.show(this, track)
+        findNavController().navigate(
+            R.id.action_searchFragment_to_playerActivity,
+            PlayerActivity.createArgs(track)
+        )
     }
 
     private fun handleClearButtonClick() {
         binding.searchField.setText("")
         tracksList.clear()
-        hideKeyboard()
+        hideKeyboard(binding.searchField)
     }
 
-    private fun hideKeyboard() {
-        val inputMethodManager =
-            getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-        val focus = currentFocus
-        inputMethodManager?.hideSoftInputFromWindow(focus?.windowToken, 0)
+    private fun hideKeyboard(field: View) {
+        val inputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        inputMethodManager?.hideSoftInputFromWindow(field.windowToken, 0)
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {

@@ -41,6 +41,7 @@ class SearchViewModel(
         if (lastSearchText == changedText) {
             return
         }
+        this.lastSearchText = changedText
         handler.removeCallbacks(searchRunnable)
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }

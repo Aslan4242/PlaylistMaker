@@ -6,14 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import com.example.playlistmaker.databinding.FragmentFavouritesBinding
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.example.playlistmaker.media.models.PlaylistsScreenState
 import com.example.playlistmaker.media.presentation.view_model.PlaylistsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment: Fragment() {
-    private lateinit var binding: FragmentPlaylistsBinding
-
+    private var _binding: FragmentPlaylistsBinding? = null
+    private val binding get() = _binding!!
     private val playlistsViewModel: PlaylistsViewModel by viewModel()
 
     override fun onCreateView(
@@ -21,7 +22,7 @@ class PlaylistsFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
+        _binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -31,6 +32,11 @@ class PlaylistsFragment: Fragment() {
         playlistsViewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun render(state: PlaylistsScreenState) {

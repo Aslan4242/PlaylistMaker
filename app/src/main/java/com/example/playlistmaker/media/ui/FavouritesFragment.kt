@@ -12,8 +12,8 @@ import com.example.playlistmaker.media.presentation.view_model.FavouritesViewMod
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavouritesFragment: Fragment() {
-    private lateinit var binding: FragmentFavouritesBinding
-
+    private var _binding: FragmentFavouritesBinding? = null
+    private val binding get() = _binding!!
     private val favouritesViewModel: FavouritesViewModel by viewModel()
 
     override fun onCreateView(
@@ -21,7 +21,7 @@ class FavouritesFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentFavouritesBinding.inflate(inflater, container, false)
+        _binding = FragmentFavouritesBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -31,6 +31,11 @@ class FavouritesFragment: Fragment() {
         favouritesViewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun render(state: FavouriteTracksScreenState) {
