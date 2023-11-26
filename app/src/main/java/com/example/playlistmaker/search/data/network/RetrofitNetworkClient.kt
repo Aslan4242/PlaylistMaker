@@ -20,7 +20,7 @@ class RetrofitNetworkClient(private val itunesService: ITunesApi) : NetworkClien
                 response.apply { resultCode = 200 }
             } catch (e: Exception) {
                 Response().apply {
-                    resultCode = 500
+                    resultCode = 400
                     message = e.message.toString()
                 }
             }

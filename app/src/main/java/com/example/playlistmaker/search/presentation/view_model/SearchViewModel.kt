@@ -32,10 +32,8 @@ class SearchViewModel(
         viewModelScope,
         true
     ) { track ->
-        if (track != null) {
-            if (track.isNotEmpty()) {
-                searchAction(track)
-            }
+        if (track?.isNotEmpty() == true) {
+            searchAction(track)
         }
     }
 
@@ -55,13 +53,14 @@ class SearchViewModel(
         if (searchText.isNotEmpty()) {
             setState(SearchScreenState.Progress)
             viewModelScope.launch {
-                tracksInteractor.search(searchText).collect {
+                tracksInteractor.search(searchText).collect { pair ->
                     val tracks = ArrayList<Track>()
-                    if (it.first != null) {
-                        tracks.addAll(it.first!!)
+                    val collection = pair.first
+                    if (collection != null) {
+                        tracks.addAll(collection)
                     }
                     when {
-                        it.second != null -> {
+                        pair.second != null -> {
                             setState(SearchScreenState.Error)
                         }
 
