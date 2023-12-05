@@ -8,7 +8,7 @@ import com.example.playlistmaker.search.domain.api.HistoryInteractor
 import com.example.playlistmaker.search.domain.api.TracksInteractor
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.presentation.models.SearchScreenState
-import com.example.playlistmaker.search.presentation.utils.SingleEventLiveData
+import com.example.playlistmaker.search.presentation.utils.SingleLiveEvent
 import com.example.playlistmaker.search.presentation.utils.debounce
 import kotlinx.coroutines.launch
 
@@ -19,8 +19,7 @@ class SearchViewModel(
     private val _state = MutableLiveData<SearchScreenState>()
     fun state(): LiveData<SearchScreenState> = _state
 
-    private val showPlayerTrigger = SingleEventLiveData<Track>()
-    fun getShowPlayerTrigger(): LiveData<Track> = showPlayerTrigger
+    private val showPlayer = SingleLiveEvent<Track>()
 
     private var lastSearchText: String? = null
     private var currentSearchText: String? = null
@@ -115,17 +114,23 @@ class SearchViewModel(
     }
 
     fun addTrackToSearchHistory(track: Track) {
-        historyInteractor.addTrackToSearchHistory(track)
+        viewModelScope.launch {
+            historyInteractor.addTrackToSearchHistory(track)
+
+        }
     }
 
     fun onClearSearchHistoryButtonClick() {
-        historyInteractor.clearSearchHistory()
+        viewModelScope.launch {
+            historyInteractor.clearSearchHistory()
+
+        }
         setState(SearchScreenState.List(ArrayList()))
     }
 
     fun showPlayer(track: Track) {
         if (clickDebounce()) {
-            showPlayerTrigger.value = track
+            showPlayer.value = track
         }
     }
 

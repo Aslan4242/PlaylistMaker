@@ -14,6 +14,7 @@ import com.example.playlistmaker.player.presentation.models.ParcelableTrack
 import com.example.playlistmaker.player.presentation.models.PlayerScreenState
 import com.example.playlistmaker.player.presentation.view_model.PlayerViewModel
 import com.example.playlistmaker.search.domain.models.Track
+import com.example.playlistmaker.settings.domain.api.SettingsInteractor
 import org.koin.android.ext.android.getKoin
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
@@ -36,8 +37,16 @@ class PlayerActivity : AppCompatActivity() {
         getTrack(track)
         viewModel = getKoin().get { parametersOf(track) }
 
-        viewModel.state().observe(this) {
+        viewModel.observeState().observe(this) {
             render(it)
+        }
+
+        viewModel.observeFavoriteState().observe(this) {
+            renderAddToFavoriteButton(it)
+        }
+
+        binding.addToFavoriteButton.setOnClickListener {
+            viewModel.clickOnAddToFavoriteButton()
         }
 
         binding.playButton.setOnClickListener {
@@ -92,6 +101,20 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
+    private fun renderAddToFavoriteButton(isFavorite: Boolean) {
+        val settingsInteractor: SettingsInteractor = getKoin().get()
+        val isDark = settingsInteractor.getDarkTheme()
+        val trackNotAddedImage = if (isDark) R.drawable.ic_add_to_favorite_night else
+            R.drawable.ic_add_to_favorite
+        val trackAddedImage = if (isDark) R.drawable.ic_track_added_to_favorites_button_night else
+            R.drawable.ic_track_added_to_favorites_button
+        if (isFavorite) {
+            binding.addToFavoriteButton.setImageResource(trackAddedImage)
+        } else {
+            binding.addToFavoriteButton.setImageResource(trackNotAddedImage)
+        }
+    }
+
     private fun onGetProgressState(time: String?) {
         setTime(time)
     }
@@ -113,7 +136,7 @@ class PlayerActivity : AppCompatActivity() {
         } else {
             binding.albumValue.text = track.collectionName
         }
-        binding.yearValue.text = track.releaseDate?.substring(0, 4)
+        binding.yearValue.text = track.releaseDate?.toString()
         binding.genreValue.text = track.primaryGenreName
         binding.countryValue.text = track.country
         Glide.with(this)
@@ -139,14 +162,6 @@ class PlayerActivity : AppCompatActivity() {
     companion object {
         private const val TRACK = "TRACK"
 
-        fun createArgs(track: Track): Bundle =
-            bundleOf(TRACK to ParcelableTrackMapper.map(track))
-
-//        fun show(context: Context, track: Track) {
-//            val intent = Intent(context, PlayerActivity::class.java)
-//            intent.putExtra(TRACK, ParcelableTrackMapper.map(track))
-//
-//            context.startActivity(intent)
-//        }
+        fun createArgs(track: Track): Bundle = bundleOf(TRACK to ParcelableTrackMapper.map(track))
     }
 }
