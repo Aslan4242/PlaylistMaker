@@ -9,7 +9,7 @@ import com.example.playlistmaker.media.data.db.entity.TrackEntity
 @Dao
 interface TrackDao {
 
-    @Query("SELECT * FROM ${TrackEntity.TABLE_NAME} ORDER BY id DESC")
+    @Query("SELECT * FROM ${TrackEntity.TABLE_NAME}")
     suspend fun getTracks(): List<TrackEntity>
 
     @Query("SELECT trackId FROM ${TrackEntity.TABLE_NAME} ")

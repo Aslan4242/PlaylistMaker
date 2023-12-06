@@ -32,7 +32,6 @@ class TrackDbConvertor {
             country = track.country,
             trackTimeMillis = track.trackTimeMillis,
             previewUrl = track.previewUrl,
-            isFavorite = true
         )
     }
 }

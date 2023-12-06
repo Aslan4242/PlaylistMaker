@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.search.domain.models.Track
 
-class FavoritesAdapter(private var tracks: ArrayList<Track>) : RecyclerView.Adapter<FavoritesViewHolder>() {
+class FavoritesAdapter(var tracks: ArrayList<Track>) : RecyclerView.Adapter<FavoritesViewHolder>() {
     private var onListElementClickListener: OnListElementClickListener? = null
 
 
@@ -28,14 +28,6 @@ class FavoritesAdapter(private var tracks: ArrayList<Track>) : RecyclerView.Adap
         holder.itemView.setOnClickListener {
             onListElementClickListener?.onListElementClick(position)
         }
-    }
-
-    fun addItems(values: List<Track>) {
-        this.tracks.clear()
-        if (values.isNotEmpty()) {
-            this.tracks.addAll(values)
-        }
-        this.notifyDataSetChanged()
     }
 
     override fun getItemCount() = tracks.size

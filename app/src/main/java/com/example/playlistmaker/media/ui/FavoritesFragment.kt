@@ -1,5 +1,6 @@
 package com.example.playlistmaker.media.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,9 +17,10 @@ import com.example.playlistmaker.player.ui.PlayerActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavoritesFragment: Fragment() {
-    private lateinit var binding: FragmentFavoritesBinding
+    private var _binding: FragmentFavoritesBinding? = null
+    private val binding get() = _binding!!
 
-    private val viewModel: FavoritesViewModel by viewModel()
+    private val favoritesViewModel: FavoritesViewModel by viewModel()
 
     private var favoritesAdapter: FavoritesAdapter? = null
 
@@ -27,9 +29,9 @@ class FavoritesFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        lifecycle.addObserver(viewModel)
+        lifecycle.addObserver(favoritesViewModel)
 
-        binding = FragmentFavoritesBinding.inflate(inflater, container, false)
+        _binding = FragmentFavoritesBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -44,24 +46,36 @@ class FavoritesFragment: Fragment() {
         favoritesAdapter?.setOnItemClickListener(object : FavoritesAdapter.OnListElementClickListener {
             override fun onListElementClick(position: Int) {
                 val track = favoritesAdapter?.getTrack(position)
-                track?.let { viewModel.showPlayer(it) }
+                track?.let { favoritesViewModel.showPlayer(it) }
                 findNavController().navigate(
                     R.id.action_mediaFragment_to_playerActivity,
                     track?.let { PlayerActivity.createArgs(it) })
             }
         })
 
-        viewModel.observeState().observe(viewLifecycleOwner) {
+        favoritesViewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
     private fun render(state: FavoriteTracksScreenState) {
         binding.favoritesEmpty.isVisible = state is FavoriteTracksScreenState.Empty
         binding.favoritesRecyclerView.isVisible = state is FavoriteTracksScreenState.Content
         when (state) {
             is FavoriteTracksScreenState.Loading, FavoriteTracksScreenState.Empty -> Unit
-            is FavoriteTracksScreenState.Content -> favoritesAdapter?.addItems(state.tracks)
+            is FavoriteTracksScreenState.Content -> favoritesAdapter?.apply {
+                this.tracks.clear()
+                if (state.tracks.isNotEmpty()) {
+                    this.tracks.addAll(state.tracks)
+                }
+                this.notifyDataSetChanged()
+            }
         }
     }
 

@@ -166,10 +166,10 @@ class SearchFragment : Fragment() {
         binding.clearHistory.isVisible = state is SearchScreenState.History && state.tracks.isNotEmpty()
         binding.progressBar.isVisible = state is SearchScreenState.Progress
         when (state) {
-            is SearchScreenState.List -> tracksAdapter.addItems(state.tracks)
+            is SearchScreenState.List -> tracksAdapter.updateTrackList(state.tracks)
             is SearchScreenState.Empty -> Unit
             is SearchScreenState.Error -> Unit
-            is SearchScreenState.History -> searchHistoryAdapter.addItems(state.tracks)
+            is SearchScreenState.History -> searchHistoryAdapter.updateTrackList(state.tracks)
             is SearchScreenState.Progress -> Unit
         }
     }
