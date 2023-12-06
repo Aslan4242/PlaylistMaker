@@ -1,26 +1,43 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/circle.xml" value="0.199" />
+        <entry key="app/src/main/res/drawable/circle_grey.xml" value="0.199" />
         <entry key="app/src/main/res/drawable/clear_text_button.xml" value="0.1075" />
-        <entry key="app/src/main/res/drawable/edit_text_background.xml" value="0.266" />
+        <entry key="app/src/main/res/drawable/edit_text_background.xml" value="0.16071014404296877" />
+        <entry key="app/src/main/res/drawable/ic_add_to_queue.xml" value="0.198" />
+        <entry key="app/src/main/res/drawable/ic_add_to_queue_night.xml" value="0.198" />
         <entry key="app/src/main/res/drawable/ic_arrow_back.xml" value="0.18" />
         <entry key="app/src/main/res/drawable/ic_arrow_forward.xml" value="0.107" />
+        <entry key="app/src/main/res/drawable/ic_arrow_forward_grey.xml" value="0.199" />
+        <entry key="app/src/main/res/drawable/ic_arrow_forward_white.xml" value="0.199" />
+        <entry key="app/src/main/res/drawable/ic_light_mode.xml" value="0.199" />
         <entry key="app/src/main/res/drawable/ic_media_button.xml" value="0.107" />
+        <entry key="app/src/main/res/drawable/ic_nothing_found.xml" value="0.199" />
+        <entry key="app/src/main/res/drawable/ic_nothing_found_dark.xml" value="0.199" />
+        <entry key="app/src/main/res/drawable/ic_pause_button.xml" value="0.198" />
+        <entry key="app/src/main/res/drawable/ic_pause_button_night.xml" value="0.198" />
+        <entry key="app/src/main/res/drawable/ic_play_button.xml" value="0.198" />
+        <entry key="app/src/main/res/drawable/ic_play_button_night.xml" value="0.198" />
         <entry key="app/src/main/res/drawable/ic_search_button.xml" value="0.23" />
         <entry key="app/src/main/res/drawable/ic_settings_button.xml" value="0.107" />
         <entry key="app/src/main/res/drawable/ic_share_app.xml" value="0.107" />
+        <entry key="app/src/main/res/drawable/ic_something_went_wrong.xml" value="0.199" />
+        <entry key="app/src/main/res/drawable/ic_something_went_wrong_dark.xml" value="0.199" />
         <entry key="app/src/main/res/drawable/ic_support.xml" value="0.107" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="app/src/main/res/drawable/track_image_placeholder.xml" value="0.112" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_media.xml" value="0.20626489362146103" />
-        <entry key="app/src/main/res/layout/activity_search.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/activity_settings.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/activity_player.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_search.xml" value="0.21890547263681592" />
+        <entry key="app/src/main/res/layout/activity_settings.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_settings2.xml" value="0.27350427350427353" />
         <entry key="app/src/main/res/layout/test_image_view.xml" value="0.2736212056434374" />
+        <entry key="app/src/main/res/layout/track_view.xml" value="0.6751336898395722" />
       </map>
     </option>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="jbr-17" project-jdk-type="JavaSDK" />
 </project>
