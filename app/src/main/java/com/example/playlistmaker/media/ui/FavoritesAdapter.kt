@@ -1,15 +1,14 @@
-package com.example.playlistmaker.search.ui
+package com.example.playlistmaker.media.ui
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.search.domain.models.Track
 
-class TrackAdapter(var tracks: ArrayList<Track>) : RecyclerView.Adapter<TrackViewHolder> () {
-
+class FavoritesAdapter(var tracks: ArrayList<Track>) : RecyclerView.Adapter<FavoritesViewHolder>() {
     private var onListElementClickListener: OnListElementClickListener? = null
+
 
     interface OnListElementClickListener {
         fun onListElementClick(position: Int)
@@ -19,25 +18,16 @@ class TrackAdapter(var tracks: ArrayList<Track>) : RecyclerView.Adapter<TrackVie
         onListElementClickListener = listener
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoritesViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.track_view, parent, false)
-        return TrackViewHolder(view)
+        return FavoritesViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: FavoritesViewHolder, position: Int) {
         holder.bind(tracks[position])
         holder.itemView.setOnClickListener {
             onListElementClickListener?.onListElementClick(position)
         }
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun updateTrackList(values: ArrayList<Track>) {
-        this.tracks.clear()
-        if (values.size > 0) {
-            this.tracks.addAll(values)
-        }
-        this.notifyDataSetChanged()
     }
 
     override fun getItemCount() = tracks.size

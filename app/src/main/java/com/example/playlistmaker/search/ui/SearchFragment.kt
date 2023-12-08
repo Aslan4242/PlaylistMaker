@@ -49,10 +49,6 @@ class SearchFragment : Fragment() {
             render(it)
         }
 
-        viewModel.getShowPlayerTrigger().observe(viewLifecycleOwner) {
-            showPlayerActivity(it)
-        }
-
         binding.clearIcon.setOnClickListener {
             handleClearButtonClick()
         }
@@ -83,8 +79,13 @@ class SearchFragment : Fragment() {
 
         tracksAdapter.setOnItemClickListener(object : TrackAdapter.OnListElementClickListener {
             override fun onListElementClick(position: Int) {
+                val track = tracksAdapter.getTrack(position)
                 viewModel.addTrackToSearchHistory(tracksAdapter.getTrack(position))
-                viewModel.showPlayer(tracksAdapter.getTrack(position))
+                viewModel.showPlayer(track)
+                findNavController().navigate(
+                    R.id.action_searchFragment_to_playerActivity,
+                    PlayerActivity.createArgs(track)
+                )
             }
         })
 
@@ -102,7 +103,7 @@ class SearchFragment : Fragment() {
             false
         }
 
-        binding.searchField.setOnFocusChangeListener { view, hasFocus ->
+        binding.searchField.setOnFocusChangeListener { _, hasFocus ->
             viewModel.onEditFocusChange(hasFocus)
         }
 
@@ -112,7 +113,12 @@ class SearchFragment : Fragment() {
         searchHistoryAdapter.setOnItemClickListener(object :
             TrackAdapter.OnListElementClickListener {
             override fun onListElementClick(position: Int) {
-                viewModel.showPlayer(searchHistoryAdapter.getTrack(position))
+                val track = searchHistoryAdapter.getTrack(position)
+                viewModel.showPlayer(track)
+                findNavController().navigate(
+                    R.id.action_searchFragment_to_playerActivity,
+                    PlayerActivity.createArgs(track)
+                )
             }
         })
 
@@ -130,13 +136,6 @@ class SearchFragment : Fragment() {
         super.onViewStateRestored(savedInstanceState)
         editText = savedInstanceState?.getString(EDIT_TEXT)
         binding.searchField.setText(editText)
-    }
-
-    private fun showPlayerActivity(track: Track) {
-        findNavController().navigate(
-            R.id.action_searchFragment_to_playerActivity,
-            PlayerActivity.createArgs(track)
-        )
     }
 
     private fun handleClearButtonClick() {
@@ -167,10 +166,10 @@ class SearchFragment : Fragment() {
         binding.clearHistory.isVisible = state is SearchScreenState.History && state.tracks.isNotEmpty()
         binding.progressBar.isVisible = state is SearchScreenState.Progress
         when (state) {
-            is SearchScreenState.List -> tracksAdapter.addItems(state.tracks)
+            is SearchScreenState.List -> tracksAdapter.updateTrackList(state.tracks)
             is SearchScreenState.Empty -> Unit
             is SearchScreenState.Error -> Unit
-            is SearchScreenState.History -> searchHistoryAdapter.addItems(state.tracks)
+            is SearchScreenState.History -> searchHistoryAdapter.updateTrackList(state.tracks)
             is SearchScreenState.Progress -> Unit
         }
     }

@@ -4,28 +4,41 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.media.domain.db.FavoriteTracksInteractor
 import com.example.playlistmaker.player.domain.api.PlayerInteractor
 import com.example.playlistmaker.player.presentation.models.PlayerScreenState
+import com.example.playlistmaker.search.domain.api.HistoryInteractor
 import com.example.playlistmaker.search.domain.models.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class PlayerViewModel(private val track: Track, private val playerInteractor: PlayerInteractor) :
-    ViewModel() {
+class PlayerViewModel(
+    private val track: Track,
+    private val playerInteractor: PlayerInteractor,
+    private val favoritesInteractor: FavoriteTracksInteractor,
+    private val historyInteractor: HistoryInteractor,
+) : ViewModel() {
 
     private val _state = MutableLiveData<PlayerScreenState>()
     private var currentTime: String? = null
     private var playerTimerJob: Job? = null
 
+    fun observeState(): LiveData<PlayerScreenState> = _state
+
+    private val favoriteLiveData = MutableLiveData<Boolean>()
+    fun observeFavoriteState(): LiveData<Boolean> = favoriteLiveData
+
     init {
         preparePlayer()
+        viewModelScope.launch {
+            track.isFavorite = favoritesInteractor.isFavorite(track.trackId ?: 0)
+            favoriteLiveData.value = track.isFavorite
+        }
     }
 
-    fun state(): LiveData<PlayerScreenState> = _state
-
     private fun setState(state: PlayerScreenState) {
-        _state.setValue(state)
+        _state.value = state
     }
 
     private fun preparePlayer() {
@@ -64,6 +77,19 @@ class PlayerViewModel(private val track: Track, private val playerInteractor: Pl
                 currentTime = getCurrentTrackPosition()
                 setState(PlayerScreenState.Progress(getCurrentTrackPosition()))
             }
+        }
+    }
+
+    fun clickOnAddToFavoriteButton() {
+        viewModelScope.launch {
+            track.isFavorite = !track.isFavorite
+            favoriteLiveData.value = track.isFavorite
+            if (track.isFavorite) {
+                favoritesInteractor.saveFavoriteTrack(track)
+            } else {
+                favoritesInteractor.deleteFavoriteTrack(track.trackId!!)
+            }
+            historyInteractor.addTrackToSearchHistory(track)
         }
     }
 

@@ -2,6 +2,8 @@ package com.example.playlistmaker.di
 
 import android.content.Context
 import android.media.MediaPlayer
+import androidx.room.Room
+import com.example.playlistmaker.media.data.db.AppDatabase
 import com.example.playlistmaker.search.data.network.ITunesApi
 import com.google.gson.Gson
 import com.example.playlistmaker.search.data.NetworkClient
@@ -33,6 +35,11 @@ val dataModule = module {
     single {
         androidContext()
             .getSharedPreferences("track_history_preferences", Context.MODE_PRIVATE)
+    }
+
+    single {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+            .build()
     }
 
     factory { Gson() }

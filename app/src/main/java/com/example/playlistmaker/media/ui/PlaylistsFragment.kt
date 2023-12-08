@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.example.playlistmaker.databinding.FragmentFavouritesBinding
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.example.playlistmaker.media.models.PlaylistsScreenState
 import com.example.playlistmaker.media.presentation.view_model.PlaylistsViewModel

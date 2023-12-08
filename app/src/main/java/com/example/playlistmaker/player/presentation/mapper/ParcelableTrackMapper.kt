@@ -7,29 +7,33 @@ object ParcelableTrackMapper {
 
     fun map(track: Track): ParcelableTrack {
         return ParcelableTrack(
+            trackId = track.trackId,
             trackName = track.trackName,
             artistName = track.artistName,
             trackTime = track.trackTimeMillis,
             artworkUrl100 = track.artworkUrl100,
             albumName = track.collectionName,
-            releaseDate = track.releaseDate,
+            releaseYear = track.releaseDate,
             genreName = track.primaryGenreName,
             country = track.country,
-            previewUrl = track.previewUrl
+            previewUrl = track.previewUrl,
+            isFavorite = track.isFavorite
         )
     }
 
     fun map(track: ParcelableTrack): Track {
         return Track(
-            trackName = track.trackName.toString(),
-            artistName = track.artistName.toString(),
+            trackId = track.trackId,
+            trackName = track.trackName,
+            artistName = track.artistName,
             trackTimeMillis = track.trackTime,
             artworkUrl100 = track.artworkUrl100,
             collectionName = track.albumName,
-            releaseDate = track.releaseDate,
+            releaseDate = track.releaseYear,
             primaryGenreName = track.genreName,
             country = track.country,
-            previewUrl = track.previewUrl
+            previewUrl = track.previewUrl,
+            isFavorite = track.isFavorite
         )
     }
 }
