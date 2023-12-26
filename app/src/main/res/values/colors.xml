@@ -13,4 +13,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00000000</color>
     <color name="yellow">#FCD452</color>
+    <color name="overlay_color">#99000000</color>
 </resources>

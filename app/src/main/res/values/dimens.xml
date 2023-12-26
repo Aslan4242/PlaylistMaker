@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="main_text_size">22sp</dimen>
+    <dimen name="radius_3_5">3.5dp</dimen>
+    <dimen name="add_button_radius">8dp</dimen>
     <dimen name="main_corner_radius">16dp</dimen>
+    <dimen name="radius_44">44dp</dimen>
     <dimen name="refresh_button_corner_radius">54dp</dimen>
     <dimen name="main_icon_padding">10dp</dimen>
     <dimen name="main_button_margin_bottom">16dp</dimen>
@@ -9,6 +12,7 @@
     <dimen name="settings_margin_horizontal">16dp</dimen>
     <dimen name="refresh_button_text_size">14sp</dimen>
     <dimen name="settings_text_size">16sp</dimen>
+    <dimen name="add_playlist_field_text_size">16sp</dimen>
     <dimen name="placeholder_text_size">19sp</dimen>
     <dimen name="search_padding_horizontal">16dp</dimen>
     <dimen name="padding_top">14dp</dimen>
@@ -19,25 +23,36 @@
     <dimen name="space_1">1dp</dimen>
     <dimen name="space_2">2dp</dimen>
     <dimen name="space_4">4dp</dimen>
+    <dimen name="space_6">6dp</dimen>
     <dimen name="space_8">8dp</dimen>
     <dimen name="space_9">9dp</dimen>
+    <dimen name="space_10">10dp</dimen>
     <dimen name="space_12">12dp</dimen>
+    <dimen name="space_15">15dp</dimen>
     <dimen name="space_16">16dp</dimen>
+    <dimen name="space_17">17dp</dimen>
     <dimen name="space_18">18dp</dimen>
     <dimen name="space_20">20dp</dimen>
     <dimen name="space_23">23dp</dimen>
-    <dimen name="space_30">30dp</dimen>
     <dimen name="space_24">24dp</dimen>
+    <dimen name="space_26">26dp</dimen>
+    <dimen name="space_30">30dp</dimen>
+    <dimen name="space_32">32dp</dimen>
     <dimen name="space_40">40dp</dimen>
     <dimen name="space_44">44dp</dimen>
     <dimen name="space_45">45dp</dimen>
     <dimen name="space_46">46dp</dimen>
+    <dimen name="space_50">50dp</dimen>
     <dimen name="space_66">66dp</dimen>
+    <dimen name="space_80">80dp</dimen>
     <dimen name="space_82">82dp</dimen>
     <dimen name="space_100">100dp</dimen>
     <dimen name="space_102">102dp</dimen>
     <dimen name="space_106">106dp</dimen>
     <dimen name="space_140">140dp</dimen>
+    <dimen name="space_200">200dp</dimen>
+    <dimen name="space_312">312dp</dimen>
+    <dimen name="bottom_sheet_height">500dp</dimen>
     <dimen name="track_margin_vertical">8dp</dimen>
     <dimen name="track_data_text_size">11sp</dimen>
     <dimen name="text_size_13">13sp</dimen>
