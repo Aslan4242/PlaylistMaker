@@ -50,12 +50,14 @@
         android:layout_marginHorizontal="@dimen/space_16"
         android:layout_marginTop="@dimen/space_32"
         android:hint="@string/playlist_name"
+        android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
         app:hintTextAppearance="@style/AddPlaylistFieldStyle"
         style="@style/AddPlaylistTextInputLayoutStyle">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textCursorDrawable="@drawable/ic_cursor"
             android:paddingHorizontal="@dimen/space_15"
             android:paddingVertical="@dimen/space_18"
             />
@@ -71,6 +73,7 @@
         android:layout_marginHorizontal="@dimen/space_16"
         android:layout_marginTop="@dimen/space_17"
         android:hint="@string/playlist_description"
+        android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
         app:hintTextAppearance="@style/AddPlaylistFieldStyle"
         style="@style/AddPlaylistTextInputLayoutStyle">
 
