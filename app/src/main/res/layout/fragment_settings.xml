@@ -29,6 +29,8 @@
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/space_16"
         android:paddingEnd="@dimen/space_9"
+        android:theme="@style/SCBSwitchStyle"
+        style="@style/SwitcherTextStyle"
         android:text="@string/night_theme" />
 
     <TextView

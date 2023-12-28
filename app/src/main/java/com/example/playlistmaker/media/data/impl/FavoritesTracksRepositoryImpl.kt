@@ -1,4 +1,4 @@
-package com.example.playlistmaker.media.data
+package com.example.playlistmaker.media.data.impl
 
 import com.example.playlistmaker.media.data.converters.TrackDbConvertor
 import com.example.playlistmaker.media.data.db.AppDatabase
@@ -17,7 +17,7 @@ class FavoritesTracksRepositoryImpl(
         appDatabase.trackDao().addTrack(trackEntity)
     }
 
-    override fun getTracks(): Flow<List<Track>> = flow {
+    override suspend fun getTracks(): Flow<List<Track>> = flow {
         val tracks = appDatabase.trackDao().getTracks().reversed()
         emit(convertFromTrackEntity(tracks))
     }

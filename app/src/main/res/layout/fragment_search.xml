@@ -36,6 +36,7 @@
             android:layout_height="36dp"
             android:drawableStart="@drawable/ic_search_button"
             android:drawablePadding="9dp"
+            android:textCursorDrawable="@drawable/ic_cursor"
             android:hint="@string/search_button"
             android:inputType="text"
             android:lines="1"

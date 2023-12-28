@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -19,6 +20,17 @@
             style="@style/PlaceHolderStyle"
             android:layout_marginTop="@dimen/space_46"
             android:text="@string/there_are_no_playlists" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvPlaylistGrid"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:scrollbars="vertical"
+            android:visibility="visible"
+            tools:itemCount="4"
+            tools:listitem="@layout/media_playlist" />
+
     </LinearLayout>
 
 </FrameLayout>

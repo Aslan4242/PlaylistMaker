@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:padding="@dimen/space_8"
+    android:foreground="?attr/selectableItemBackground">
+
+    <ImageView
+        android:id="@+id/playerPlaylistImage"
+        android:layout_width="@dimen/space_45"
+        android:layout_height="@dimen/space_45"
+        android:scaleType="centerCrop"
+        android:layout_marginEnd="@dimen/space_8"
+        android:src="@drawable/track_image_placeholder"
+        tools:ignore="ContentDescription"/>
+
+    <TextView
+        android:id="@+id/playerPlaylistName"
+        style="@style/PlayerPlaylistNameStyle"
+        android:layout_marginTop="@dimen/space_6"
+        android:textSize="@dimen/track_name_text_size"
+        android:fontFamily="@font/ys_display_regular"
+        android:layout_toEndOf = "@+id/playerPlaylistImage" />
+
+    <TextView
+        android:id="@+id/playerPlaylistTrackCount"
+        style="@style/PlayerPlaylistTrackCountStyle"
+        android:textSize="@dimen/track_data_text_size"
+        android:layout_below="@id/playerPlaylistName"
+        android:layout_toEndOf = "@+id/playerPlaylistImage" />
+</RelativeLayout>
