@@ -1,7 +1,10 @@
 package com.example.playlistmaker.di
 
+import com.example.playlistmaker.media.models.Playlist
+import com.example.playlistmaker.media.presentation.view_model.PlaylistInfoViewModel
 import com.example.playlistmaker.media.presentation.view_model.NewPlaylistViewModel
 import com.example.playlistmaker.media.presentation.view_model.FavoritesViewModel
+import com.example.playlistmaker.media.presentation.view_model.PlaylistEditViewModel
 import com.example.playlistmaker.media.presentation.view_model.PlaylistsViewModel
 import com.example.playlistmaker.player.presentation.view_model.PlayerViewModel
 import com.example.playlistmaker.search.domain.models.Track
@@ -33,5 +36,13 @@ val viewModelModule = module {
 
     viewModel {
         NewPlaylistViewModel(get())
+    }
+
+    viewModel { (playlistId: Long) ->
+        PlaylistInfoViewModel(playlistId, get())
+    }
+
+    viewModel {(playlist: Playlist) ->
+        PlaylistEditViewModel(playlist, get())
     }
 }

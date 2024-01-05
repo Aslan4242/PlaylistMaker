@@ -4,6 +4,8 @@ import android.content.Context
 import android.media.MediaPlayer
 import androidx.room.Room
 import com.example.playlistmaker.media.data.db.AppDatabase
+import com.example.playlistmaker.media.data.impl.ExternalNavigatorMediaImpl
+import com.example.playlistmaker.media.domain.db.ExternalNavigatorMedia
 import com.example.playlistmaker.search.data.network.ITunesApi
 import com.google.gson.Gson
 import com.example.playlistmaker.search.data.NetworkClient
@@ -40,6 +42,10 @@ val dataModule = module {
     single {
         Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
             .build()
+    }
+
+    single<ExternalNavigatorMedia> {
+        ExternalNavigatorMediaImpl(androidContext())
     }
 
     factory { Gson() }

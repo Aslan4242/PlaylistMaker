@@ -18,6 +18,7 @@
         app:srcCompat="@drawable/ic_arrow_back" />
 
     <TextView
+        android:id="@+id/new_playlist_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/space_24"

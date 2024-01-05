@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.media.models.Playlist
-import com.example.playlistmaker.search.presentation.utils.toastText
+import com.example.playlistmaker.search.presentation.utils.toastTrackText
 import java.io.File
 
 class BottomSheetViewHolder(parentView: ViewGroup) : RecyclerView.ViewHolder(
@@ -22,7 +22,7 @@ class BottomSheetViewHolder(parentView: ViewGroup) : RecyclerView.ViewHolder(
 
     fun bind(model: Playlist) {
         playlistNameView.text = model.name.toString()
-        playlistTrackInfoView.text = toastText(model.trackCount)
+        playlistTrackInfoView.text = toastTrackText(model.trackCount)
 
         playlistImageView.setImageResource(R.drawable.track_image_placeholder)
         if (!model.filePath.isNullOrEmpty()) {

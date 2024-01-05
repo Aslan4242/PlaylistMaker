@@ -11,13 +11,28 @@ class PlaylistTrackDbConvertor {
             trackId = track.trackId ?: 0,
             trackName = track.trackName,
             artistName = track.artistName,
-            trackTime= track.trackTimeMillis.toString(),
+            trackTime= track.trackTimeMillis,
             artworkUrl100 = track.artworkUrl100,
             collectionName = track.collectionName,
             releaseYear = track.releaseDate,
             primaryGenreName = track.primaryGenreName,
             country = track.country,
             previewUrl = track.previewUrl
+        )
+    }
+
+    fun map(playlistTrack: PlaylistTrackEntity): Track {
+        return Track(
+            trackId = playlistTrack.trackId,
+            trackName = playlistTrack.trackName,
+            artistName = playlistTrack.artistName,
+            trackTimeMillis= playlistTrack.trackTime,
+            artworkUrl100 = playlistTrack.artworkUrl100,
+            collectionName = playlistTrack.collectionName,
+            releaseDate = playlistTrack.releaseYear,
+            primaryGenreName = playlistTrack.primaryGenreName,
+            country = playlistTrack.country,
+            previewUrl = playlistTrack.previewUrl
         )
     }
 }

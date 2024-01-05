@@ -14,7 +14,7 @@ import com.example.playlistmaker.media.models.PlaylistsScreenState
 import com.example.playlistmaker.media.presentation.view_model.PlaylistsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PlaylistsFragment: Fragment() {
+class PlaylistsFragment : Fragment() {
     private var _binding: FragmentPlaylistsBinding? = null
     private val binding get() = _binding!!
     private val playlistsViewModel: PlaylistsViewModel by viewModel()
@@ -35,13 +35,27 @@ class PlaylistsFragment: Fragment() {
         binding.rvPlaylistGrid.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvPlaylistGrid.adapter = playlistsAdapter
 
-        playlistsViewModel.observeState().observe(viewLifecycleOwner) {
-            render(it)
+        playlistsViewModel.observeState().observe(viewLifecycleOwner) { state ->
+            render(state)
+        }
+
+        playlistsViewModel.getShowPlaylistInfo().observe(viewLifecycleOwner) { playlistId ->
+            showPlaylistInfo(playlistId)
         }
 
         binding.newPlaylistButton.setOnClickListener {
             findNavController().navigate(R.id.action_mediaFragment_to_addPlaylistFragment)
         }
+
+        playlistsAdapter.setOnItemClickListener(object :
+            PlaylistsAdapter.OnListElementClickListener {
+            override fun onListElementClick(position: Int) {
+                val playlistId = playlistsAdapter.getPlayListId(position)
+                val action =
+                    MediaFragmentDirections.actionMediaFragmentToAboutPlaylistFragment(playlistId!!)
+                findNavController().navigate(action)
+            }
+        })
     }
 
     override fun onDestroyView() {
@@ -57,6 +71,11 @@ class PlaylistsFragment: Fragment() {
             is PlaylistsScreenState.Loading, PlaylistsScreenState.Empty -> Unit
             is PlaylistsScreenState.Playlists -> playlistsAdapter.addItems(state.playlists)
         }
+    }
+
+    private fun showPlaylistInfo(playlistId: Long) {
+        val action = MediaFragmentDirections.actionMediaFragmentToAboutPlaylistFragment(playlistId)
+        findNavController().navigate(action)
     }
 
     companion object {
