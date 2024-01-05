@@ -47,7 +47,7 @@ class PlaylistInteractorImpl(
     override fun getPlaylistInfo(playlist: Playlist, trackList: List<Track>): String {
         val tracks = StringBuilder()
         trackList.forEachIndexed { index, track ->
-            tracks.append("\n" + index + 1 + "." + track.artistName + " - " + track.collectionName
+            tracks.append("\n" + (index + 1) + "." + track.artistName + " - " + track.collectionName
                     + "(${SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis?.toInt())})"
             )
         }
