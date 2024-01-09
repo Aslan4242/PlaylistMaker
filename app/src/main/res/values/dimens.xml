@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="main_text_size">22sp</dimen>
+    <dimen name="text_size_11">11sp</dimen>
+    <dimen name="text_size_16">16sp</dimen>
     <dimen name="radius_3_5">3.5dp</dimen>
     <dimen name="add_button_radius">8dp</dimen>
     <dimen name="main_corner_radius">16dp</dimen>
@@ -28,11 +30,14 @@
     <dimen name="space_9">9dp</dimen>
     <dimen name="space_10">10dp</dimen>
     <dimen name="space_12">12dp</dimen>
+    <dimen name="space_13">13dp</dimen>
+    <dimen name="space_14">14dp</dimen>
     <dimen name="space_15">15dp</dimen>
     <dimen name="space_16">16dp</dimen>
     <dimen name="space_17">17dp</dimen>
     <dimen name="space_18">18dp</dimen>
     <dimen name="space_20">20dp</dimen>
+    <dimen name="space_21">21dp</dimen>
     <dimen name="space_22">22dp</dimen>
     <dimen name="space_23">23dp</dimen>
     <dimen name="space_24">24dp</dimen>
@@ -54,6 +59,8 @@
     <dimen name="space_200">200dp</dimen>
     <dimen name="space_312">312dp</dimen>
     <dimen name="bottom_sheet_height">500dp</dimen>
+    <dimen name="bottom_sheet_playlist_info_height">240dp</dimen>
+    <dimen name="bottom_sheet_playlist_info_options_height">400dp</dimen>
     <dimen name="track_margin_vertical">8dp</dimen>
     <dimen name="track_data_text_size">11sp</dimen>
     <dimen name="text_size_13">13sp</dimen>

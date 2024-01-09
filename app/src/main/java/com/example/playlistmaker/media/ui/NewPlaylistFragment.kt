@@ -28,10 +28,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 
-class NewPlaylistFragment : Fragment() {
+open class NewPlaylistFragment : Fragment() {
     private var _binding: FragmentNewPlaylistBinding? = null
-    private val binding get() = _binding!!
-    private val newPlaylistsViewModel: NewPlaylistViewModel by viewModel()
+    protected val binding get() = _binding!!
+    protected open val newPlaylistsViewModel: NewPlaylistViewModel by viewModel()
     lateinit var confirmDialog: MaterialAlertDialogBuilder
 
     private val backPressedCallback = object : OnBackPressedCallback(true) {
@@ -160,15 +160,13 @@ class NewPlaylistFragment : Fragment() {
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
 
-        binding.playlistNameField.editText?.setText(savedInstanceState?.getString(NAME))
-        binding.playlistDescriptionField.editText?.setText(
-            savedInstanceState?.getString(
+        if (savedInstanceState != null) {
+            binding.playlistNameField.editText?.setText(savedInstanceState.getString(NAME))
+            binding.playlistDescriptionField.editText?.setText(savedInstanceState.getString(
                 DESCRIPTION_TEXT
-            )
-        )
-        val stringUri = savedInstanceState?.getString(IMAGE)
-        if (!stringUri.isNullOrEmpty()) {
-            if (Uri.parse(stringUri) != null) {
+            ))
+            val stringUri = savedInstanceState.getString(IMAGE)
+            if (!stringUri.isNullOrEmpty()) {
                 binding.addPlaylistButton.apply {
                     setImageURI(Uri.parse(stringUri))
                     clipToOutline = true
@@ -193,7 +191,7 @@ class NewPlaylistFragment : Fragment() {
         newPlaylistsViewModel.addPlaylist(playlist)
     }
 
-    private fun navigateBack() {
+    protected fun navigateBack() {
         if (tag.equals(PlayerActivity.NEW_PLAYLIST_TAG)) {
             parentFragmentManager.popBackStack()
         } else {

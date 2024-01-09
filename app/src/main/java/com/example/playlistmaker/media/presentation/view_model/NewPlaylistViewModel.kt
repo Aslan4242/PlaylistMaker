@@ -18,7 +18,7 @@ import java.io.FileOutputStream
 import java.io.InputStream
 import java.util.UUID
 
-class NewPlaylistViewModel(
+open class NewPlaylistViewModel(
     private val playlistInteractor: PlaylistInteractor,
 ) : ViewModel() {
     private val playlist: Playlist = Playlist()
@@ -102,7 +102,7 @@ class NewPlaylistViewModel(
         setCurrentState()
     }
 
-    fun needShowDialog(): Boolean {
+    open fun needShowDialog(): Boolean {
         return stateLiveData.value is NewPlaylistScreenState.PlayListIsNotEmpty || stateLiveData.value is NewPlaylistScreenState.PlayListPartlyEmpty
     }
 
@@ -115,6 +115,16 @@ class NewPlaylistViewModel(
             addPlaylist.value = playlist
         }
     }
+
+    protected fun setPlaylistValue(value: Playlist) {
+        playlist.id = value.id
+        playlist.name = value.name
+        playlist.description = value.description
+        playlist.filePath = value.filePath
+        playlist.trackList = value.trackList
+        playlist.trackCount = value.trackCount
+    }
+
 
     private fun clickDebounce(): Boolean {
         val current = isClickAllowed

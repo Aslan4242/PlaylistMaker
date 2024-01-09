@@ -8,11 +8,15 @@ import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.media.domain.db.PlaylistInteractor
 import com.example.playlistmaker.media.models.Playlist
 import com.example.playlistmaker.media.models.PlaylistsScreenState
+import com.example.playlistmaker.search.presentation.utils.SingleLiveEvent
 import kotlinx.coroutines.launch
 
 class PlaylistsViewModel(private val playlistInteractor: PlaylistInteractor) : ViewModel(), DefaultLifecycleObserver {
     private val stateLiveData = MutableLiveData<PlaylistsScreenState>()
     fun observeState(): LiveData<PlaylistsScreenState> = stateLiveData
+
+    private val showPlaylistInfo = SingleLiveEvent<Long>()
+    fun getShowPlaylistInfo(): LiveData<Long> = showPlaylistInfo
 
     init {
         viewModelScope.launch {
@@ -31,5 +35,4 @@ class PlaylistsViewModel(private val playlistInteractor: PlaylistInteractor) : V
             stateLiveData.postValue(PlaylistsScreenState.Playlists(playlists))
         }
     }
-
 }
